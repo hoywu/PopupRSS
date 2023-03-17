@@ -2,10 +2,10 @@ package com.devccv.popuprss.controller;
 
 import com.devccv.popuprss.App;
 import com.devccv.popuprss.ResourcesLoader;
+import com.devccv.popuprss.thread.FlushLogThread;
 import com.devccv.popuprss.util.ResourceBundleUtil;
 import com.devccv.popuprss.widget.MyToggleNode;
 import io.github.palexdev.materialfx.controls.MFXRectangleToggleNode;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextArea;
@@ -15,19 +15,22 @@ import javafx.scene.image.ImageView;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ResourceBundle;
-import java.util.concurrent.*;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class LogsViewController implements Initializable {
-    public static Runnable flushLogHolder; // 刷新日志方法
-    private static final ExecutorService flushLogThread = new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MILLISECONDS,
-            new LinkedBlockingQueue<>(1), Executors.defaultThreadFactory(), new ThreadPoolExecutor.DiscardPolicy());
+    public static AtomicBoolean stopUpdateLogUI = new AtomicBoolean(true);
+    public static AtomicBoolean pauseButtonSelected = new AtomicBoolean(false);
+    private static FlushLogThread FLUSH_LOG_THREAD;
+    private static final Lock flushLogLock = new ReentrantLock();
+    private static final Condition canFlushCondition = flushLogLock.newCondition();
     @FXML
     private TextArea logsTextArea;
-    private static final BlockingQueue<String> logHolder = new LinkedBlockingQueue<>();
-    public static boolean stopUpdateLogUI = true;
-    private static boolean pauseButtonSelected = false;
-    private static final ReentrantLock flushLock = new ReentrantLock();
+    public static final BlockingQueue<String> logHolder = new LinkedBlockingQueue<>();
     @FXML
     private MFXRectangleToggleNode pauseButton;
     @FXML
@@ -52,27 +55,10 @@ public class LogsViewController implements Initializable {
         clearButton.setLabelLeadingIcon(icon);
         clearButton.setLabelTrailingIcon(null);
 
-        //构造刷新日志暂存区方法
-        flushLogHolder = () -> {
-            if (logHolder.isEmpty()) return;
-            CompletableFuture.supplyAsync(() -> {
-                StringBuilder stringBuilder = new StringBuilder(32);
-                while (!logHolder.isEmpty()) {
-                    try {
-                        stringBuilder.append(logHolder.take());
-                    } catch (InterruptedException e) {
-                        break;
-                    }
-                }
-                return stringBuilder.toString();
-            }, flushLogThread).whenComplete((result, ex) -> {
-                if (result != null) Platform.runLater(() -> logsTextArea.appendText(result));
-            });
-        };
-
-        //将暂存区的日志输出到UI
-        stopUpdateLogUI = false;
-        flushLogHolder.run();
+        //开启日志刷新线程
+        stopUpdateLogUI.set(false);
+        FLUSH_LOG_THREAD = new FlushLogThread(logsTextArea, flushLogLock, canFlushCondition);
+        FLUSH_LOG_THREAD.start();
     }
 
     public static void newLog(String log) {
@@ -80,32 +66,33 @@ public class LogsViewController implements Initializable {
         try {
             logHolder.put(newLog);
         } catch (InterruptedException ignored) {
+            return;
         }
-        if (!stopUpdateLogUI && !pauseButtonSelected) flushLogHolder.run();
+        if (!stopUpdateLogUI.get() && !pauseButtonSelected.get()) {
+            if (flushLogLock.tryLock()) {
+                try {
+                    canFlushCondition.signalAll();
+                } finally {
+                    flushLogLock.unlock();
+                }
+            }
+        }
     }
 
     @FXML
     protected void onMouseClickedClearBtn() {
         logsTextArea.setText("[" + App.DATE_TIME_FORMATTER.format(LocalDateTime.now()) + "] " + ResourceBundleUtil.getStringValue("clear_log"));
         clearButton.setSelected(false);
-
-        for (int i = 0; i < 100; i++) {
-            new Thread(() -> {
-                while (true) {
-                    try {
-                        newLog("123");
-                        newLog("456");
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            }).start();
-        }
+        System.gc();
     }
 
     @FXML
     protected void onMouseClickedPauseBtn() {
-        pauseButtonSelected = pauseButton.isSelected();
+        pauseButtonSelected.set(pauseButton.isSelected());
+        System.gc();
+    }
+
+    public static void tryShutdownFlushLogThread() {
+        if (FLUSH_LOG_THREAD != null) FLUSH_LOG_THREAD.interrupt();
     }
 }

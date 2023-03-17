@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.*?>
-<?import javafx.scene.text.*?>
-
+<?import javafx.scene.text.Font?>
 <HBox fx:id="root" alignment="CENTER" prefHeight="500.0" prefWidth="800.0" stylesheets="@../css/main-view.css"
       xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.devccv.popuprss.controller.MainController">
@@ -24,9 +23,9 @@
                         <Label fx:id="statusText" text="%status_loading"/>
                     </HBox>
                     <HBox fx:id="statusBar" alignment="CENTER_LEFT" prefWidth="275.0">
-                        <Rectangle fx:id="errorBar" fill="#D0021B" height="16" onMouseClicked="#ab" width="100"/>
-                        <Rectangle fx:id="enableBar" fill="#2DAA00" height="16" onMouseClicked="#bc" width="100"/>
-                        <Rectangle fx:id="disableBar" fill="#F5A623" height="16" onMouseClicked="#cd" width="100"/>
+                        <Rectangle fx:id="errorBar" fill="#D0021B" height="16" width="100"/>
+                        <Rectangle fx:id="enableBar" fill="#2DAA00" height="16" width="100"/>
+                        <Rectangle fx:id="disableBar" fill="#F5A623" height="16" width="100"/>
                     </HBox>
                 </StackPane>
                 <HBox alignment="CENTER_RIGHT" prefWidth="275.0">

@@ -135,7 +135,7 @@ public class MainController implements Initializable {
         //添加选择卡到侧边栏
         ToggleButton toggle = createToggle(icon, text);
         EventHandler<ActionEvent> handler = event -> {
-            LogsViewController.stopUpdateLogUI = !"Logs".equals(viewName);
+            LogsViewController.stopUpdateLogUI.set(!"Logs".equals(viewName));
             if (!subViews.containsKey(viewName)) {
                 FXMLLoader fxmlLoader = new FXMLLoader(loadURL(fxml), ResourceBundleUtil.resource);
                 try {
@@ -172,13 +172,13 @@ public class MainController implements Initializable {
         mousePressedX = event.getSceneX();
         mousePressedY = event.getSceneY();
         //停止日志输出
-        LogsViewController.stopUpdateLogUI = true;
+        LogsViewController.stopUpdateLogUI.set(true);
     }
 
     @FXML
     protected void onMouseReleasedRoot() {
         //开启日志输出
-        LogsViewController.stopUpdateLogUI = false;
+        LogsViewController.stopUpdateLogUI.set(false);
     }
 
     @FXML
@@ -193,35 +193,9 @@ public class MainController implements Initializable {
         //关闭线程池，退出
         if (event.getButton() == MouseButton.PRIMARY) {
             App.FIXED_THREAD_POOL.shutdown();
+            LogsViewController.tryShutdownFlushLogThread();
             Platform.exit();
         }
-    }
-
-    public void ab(MouseEvent mouseEvent) {
-        for (int i = 0; i < 100; i++) {
-            new Thread(() -> {
-                while (true) {
-                    try {
-                        Platform.runLater(() -> switchToDisableStatus.accept("配置错误"));
-                        Thread.sleep(100);
-                        Platform.runLater(() -> switchToErrorStatus.accept("失败"));
-                        Thread.sleep(100);
-                        Platform.runLater(() -> switchToEnableStatus.accept("已启动"));
-                        Thread.sleep(100);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            }).start();
-        }
-    }
-
-    public void bc(MouseEvent mouseEvent) {
-        switchToErrorStatus.accept("失败");
-    }
-
-    public void cd(MouseEvent mouseEvent) {
-        switchToEnableStatus.accept("已启动");
     }
 
     private enum BAR_STATUS {
