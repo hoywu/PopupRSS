@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+
+<HBox fx:id="root" alignment="CENTER" prefHeight="500.0" prefWidth="800.0" stylesheets="@../css/main-view.css"
+      xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.devccv.popuprss.controller.MainController">
+    <AnchorPane maxHeight="450.0" maxWidth="750.0" onMouseDragged="#onMouseDraggedRoot"
+                onMousePressed="#onMousePressedRoot" onMouseReleased="#onMouseReleasedRoot" prefHeight="450.0"
+                prefWidth="750.0" styleClass="root-pane">
+        <VBox prefHeight="450.0" prefWidth="550.0" styleClass="right-pane" AnchorPane.rightAnchor="0.0">
+            <padding>
+                <Insets bottom="10.0" left="10.0" right="10.0" top="8.0"/>
+            </padding>
+            <HBox prefWidth="550.0">
+                <StackPane>
+                    <HBox alignment="CENTER_LEFT" prefWidth="275.0" spacing="10.0">
+                        <Rectangle fill="transparent" height="16" width="100"/>
+                        <Label fx:id="statusText" text="%status_loading"/>
+                    </HBox>
+                    <HBox fx:id="statusBar" alignment="CENTER_LEFT" prefWidth="275.0">
+                        <Rectangle fx:id="errorBar" fill="#D0021B" height="16" onMouseClicked="#ab" width="100"/>
+                        <Rectangle fx:id="enableBar" fill="#2DAA00" height="16" onMouseClicked="#bc" width="100"/>
+                        <Rectangle fx:id="disableBar" fill="#F5A623" height="16" onMouseClicked="#cd" width="100"/>
+                    </HBox>
+                </StackPane>
+                <HBox alignment="CENTER_RIGHT" prefWidth="275.0">
+                    <Circle fx:id="closeIcon" fill="RED" onMouseClicked="#onMouseClickedCloseIcon" radius="8"
+                            styleClass="close-icon"/>
+                </HBox>
+            </HBox>
+            <StackPane fx:id="contentPane" prefHeight="450.0" prefWidth="550.0">
+                <VBox.margin>
+                    <Insets top="8.0"/>
+                </VBox.margin>
+            </StackPane>
+        </VBox>
+
+        <VBox alignment="TOP_CENTER" prefHeight="450.0" prefWidth="200.0" styleClass="left-pane"
+              AnchorPane.leftAnchor="0.0">
+            <padding>
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+            </padding>
+            <ImageView fx:id="logo" fitHeight="100" fitWidth="100"/>
+            <Label fx:id="titleLabel" text="PopupRSS" textFill="WHITE">
+                <font>
+                    <Font size="20.0"/>
+                </font>
+                <padding>
+                    <Insets top="8.0"/>
+                </padding>
+            </Label>
+            <Label fx:id="subTitleLabel" text="Gengo Task Manager" textFill="WHITE">
+                <font>
+                    <Font size="15.0"/>
+                </font>
+                <padding>
+                    <Insets top="3.0"/>
+                </padding>
+            </Label>
+            <VBox fx:id="navBar" spacing="10.0">
+                <VBox.margin>
+                    <Insets top="20.0"/>
+                </VBox.margin>
+            </VBox>
+        </VBox>
+    </AnchorPane>
+</HBox>

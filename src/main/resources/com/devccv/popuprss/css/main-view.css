@@ -1,0 +1,43 @@
+.root-pane {
+    -fx-border-radius: 10 10 10 10;
+    -fx-background-radius: 10 10 10 10;
+    -fx-background-color: #FFFFFF;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0.2, 2.0, 2.0);
+}
+
+.right-pane {
+    -fx-background-color: #FFFFFF;
+    -fx-border-radius: 0 10 10 0;
+    -fx-background-radius: 0 10 10 0;
+}
+
+.left-pane {
+    -fx-background-color: #1CAD7E;
+    -fx-border-radius: 10 10 10 10;
+    -fx-background-radius: 10 10 10 10;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0.12, 2.0, 0);
+}
+
+.close-icon {
+    -fx-opacity: 0.5;
+}
+
+.close-icon:hover {
+    -fx-opacity: 0.7;
+}
+
+.side-bar-toggle-node {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0.1, 1.0, 1.0);
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-background-color: #1CAD7E;
+    -fx-border-color: transparent;
+
+    -fx-text-fill: white;
+}
+
+.side-bar-toggle-node:selected {
+    -fx-background-color: white;
+    -fx-text-fill: #1CAD7E;
+    -fx-font-weight: BOLD;
+}

@@ -1,0 +1,25 @@
+.log-area {
+    -fx-background-insets: 0;
+    -fx-background-color: transparent, white, transparent, white;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-border-color: #D3D3D3;
+}
+
+.log-area .content {
+    -fx-background-color: transparent, white, transparent, white;
+}
+
+.log-area:focused {
+    -fx-border-color: #1CAD7E;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0.1, 0, 0);
+}
+
+.pause-btn {
+    -mfx-selected-color: #F5A623;
+    -mfx-selected-border-color: transparent;
+}
+
+.clear-btn {
+    -mfx-selected-border-color: transparent;
+}
