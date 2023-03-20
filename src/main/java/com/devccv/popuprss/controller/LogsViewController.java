@@ -32,6 +32,8 @@ public class LogsViewController implements Initializable {
     private TextArea logsTextArea;
     public static final BlockingQueue<String> logHolder = new LinkedBlockingQueue<>();
     @FXML
+    public MFXRectangleToggleNode startButton;
+    @FXML
     private MFXRectangleToggleNode pauseButton;
     @FXML
     private MyToggleNode clearButton;
@@ -40,6 +42,7 @@ public class LogsViewController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         //设置字体
         logsTextArea.setFont(ResourceBundleUtil.logFont);
+        startButton.setFont(ResourceBundleUtil.logFont);
         pauseButton.setFont(ResourceBundleUtil.logFont);
         clearButton.setFont(ResourceBundleUtil.logFont);
 
@@ -52,6 +55,10 @@ public class LogsViewController implements Initializable {
         icon.setFitWidth(16);
         icon.setFitHeight(16);
         clearButton.setLabelLeadingIcon(icon);
+        icon = new ImageView(new Image(ResourcesLoader.loadStream("icon/play.png")));
+        icon.setFitWidth(16);
+        icon.setFitHeight(16);
+        startButton.setLabelLeadingIcon(icon);
 
         //开启日志刷新线程
         stopUpdateLogUI.set(false);
@@ -60,6 +67,7 @@ public class LogsViewController implements Initializable {
     }
 
     public static void newLog(String log) {
+        //可供外部调用的，添加新日志方法
         String newLog = "\n" + "[" + App.DATE_TIME_FORMATTER.format(LocalDateTime.now()) + "] " + log;
         try {
             logHolder.put(newLog);
@@ -78,7 +86,13 @@ public class LogsViewController implements Initializable {
     }
 
     @FXML
+    public void onMouseClickedStartBtn() {
+        //创建线程开始监视RSS
+    }
+
+    @FXML
     protected void onMouseClickedClearBtn() {
+        //清空日志
         logsTextArea.setText("[" + App.DATE_TIME_FORMATTER.format(LocalDateTime.now()) + "] " + ResourceBundleUtil.getStringValue("log_clear"));
         clearButton.setSelected(false);
         System.gc();
@@ -86,6 +100,7 @@ public class LogsViewController implements Initializable {
 
     @FXML
     protected void onMouseClickedPauseBtn() {
+        //暂停日志，清理内存
         pauseButtonSelected.set(pauseButton.isSelected());
         System.gc();
     }

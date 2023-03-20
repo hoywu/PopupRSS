@@ -15,6 +15,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Locale;
 import java.util.Properties;
 
 public class ConfigManager {
@@ -39,6 +40,11 @@ public class ConfigManager {
             Platform.runLater(() -> MainController.switchToDisableStatus.accept(ResourceBundleUtil.getStringValue("status_ready")));
         } else {
             //没有用户配置则生成默认配置
+            if (!"zh".equals(Locale.getDefault().getLanguage())) {
+                SETTINGS.setProperty("config.language", "English");
+            } else {
+                SETTINGS.setProperty("config.language", "Chinese");
+            }
             saveSettingsProperties(SETTINGS);
             Platform.runLater(() -> MainController.switchToDisableStatus.accept(ResourceBundleUtil.getStringValue("status_first_start")));
         }

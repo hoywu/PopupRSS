@@ -3,9 +3,7 @@
 <?import com.devccv.popuprss.widget.MyToggleNode?>
 <?import io.github.palexdev.materialfx.controls.MFXRectangleToggleNode?>
 <?import javafx.scene.control.TextArea?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.*?>
 <AnchorPane prefHeight="408.0" prefWidth="530.0" stylesheets="@../css/Logs.css"
             xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.devccv.popuprss.controller.LogsViewController">
@@ -13,10 +11,13 @@
         <TextArea fx:id="logsTextArea" editable="false" prefHeight="350.0" prefWidth="529.0" styleClass="log-area"
                   text="%log_default"/>
         <HBox alignment="CENTER_RIGHT" spacing="10.0">
+            <MFXRectangleToggleNode fx:id="startButton" onAction="#onMouseClickedStartBtn" prefHeight="30.0"
+                                    prefWidth="92.0" styleClass="start-btn" text="%start_button"/>
+            <HBox HBox.hgrow="ALWAYS"/>
             <MFXRectangleToggleNode fx:id="pauseButton" onAction="#onMouseClickedPauseBtn" prefHeight="30.0"
-                                    prefWidth="90.0" styleClass="pause-btn" text="%pause_log_button"/>
+                                    prefWidth="92.0" styleClass="pause-btn" text="%pause_log_button"/>
             <MyToggleNode fx:id="clearButton" onMouseClicked="#onMouseClickedClearBtn" prefHeight="30.0"
-                          prefWidth="90.0" styleClass="clear-btn" text="%clear_log_button" rippleColor="#284047"/>
+                          prefWidth="92.0" styleClass="clear-btn" text="%clear_log_button" rippleColor="#284047"/>
         </HBox>
     </VBox>
 </AnchorPane>

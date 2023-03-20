@@ -17,3 +17,38 @@
 .mfx-text-field:focus-within .floating-text {
     -fx-text-fill: #1CAD7E;
 }
+
+.language-combo:focus-within .caret .mfx-font-icon {
+    -mfx-color: #1CAD7E;
+}
+
+.language-combo .virtual-flow {
+    -track-color: derive(#1CAD7E, 90%);
+    -thumb-color: derive(#1CAD7E, 50%);
+    -thumb-hover-color: derive(#1CAD7E, 25%);
+}
+
+.language-combo .virtual-flow .mfx-combo-box-cell:hover {
+    -fx-background-color: derive(#1CAD7E, 90%);
+}
+
+.language-combo .virtual-flow .mfx-combo-box-cell:selected {
+    -fx-background-color: #1CAD7E;
+}
+
+.language-combo .virtual-flow .mfx-combo-box-cell:selected .data-label {
+    -fx-text-fill: white;
+}
+
+.language-combo .caret .mfx-ripple-generator {
+    -mfx-ripple-color: #A8ABB2;
+}
+
+.mfx-checkbox {
+    -fx-font-family: 'Sarasa Mono Slab SC';
+    -mfx-main: #1CAD7E;
+}
+
+.mfx-checkbox .mfx-ripple-generator {
+    -mfx-ripple-color: #A8ABB2;
+}

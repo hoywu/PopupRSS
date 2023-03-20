@@ -23,3 +23,8 @@
 .clear-btn {
     -mfx-selected-border-color: transparent;
 }
+
+.start-btn {
+    -mfx-selected-color: #4AAA4D;
+    -mfx-selected-border-color: transparent;
+}
