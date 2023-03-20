@@ -1,6 +1,8 @@
 package com.devccv.popuprss.controller;
 
 import com.devccv.popuprss.ResourcesLoader;
+import com.devccv.popuprss.subscribe.MicrosoftStore;
+import com.devccv.popuprss.subscribe.Subscribe;
 import com.devccv.popuprss.util.ConfigManager;
 import com.devccv.popuprss.util.Encrypt;
 import com.devccv.popuprss.util.ResourceBundleUtil;
@@ -27,26 +29,27 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class SettingsController implements Initializable {
+    private static final Subscribe subscribe = new MicrosoftStore();
     @FXML
-    public MFXTextField subscribeStatusField;
+    private MFXTextField subscribeStatusField;
     @FXML
-    public MFXTextField subscribeValidity;
+    private MFXTextField subscribeValidity;
     @FXML
-    public MFXPasswordField rssField;
+    private MFXPasswordField rssField;
     @FXML
-    public ImageView lockIcon;
+    private ImageView lockIcon;
     @FXML
-    public MFXComboBox<String> languageCombo;
+    private MFXComboBox<String> languageCombo;
     @FXML
-    public MFXTextField checkDelayField;
+    private MFXTextField checkDelayField;
     @FXML
-    public Label delayErrorLabel;
+    private Label delayErrorLabel;
     @FXML
-    public MFXCheckbox autoStartCheckbox;
+    private MFXCheckbox autoStartCheckbox;
     @FXML
-    public MFXCheckbox autoPopupCheckbox;
+    private MFXCheckbox autoPopupCheckbox;
     @FXML
-    public MyToggleNode saveButton;
+    private MyToggleNode saveButton;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -98,10 +101,10 @@ public class SettingsController implements Initializable {
         autoPopupCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> saveButton.setDisable(false));
 
         //检查订阅
-        if (isSubscribed()) {
+        if (subscribe.isSubscribed()) {
             subscribeStatusField.setText(ResourceBundleUtil.getStringValue("settings_subscribe_status_valid"));
             subscribeStatusField.setStyle("-fx-text-fill: #005F40");
-            subscribeValidity.setText(getSubscribeValidity());
+            subscribeValidity.setText(subscribe.getSubscribeValidity());
             subscribeValidity.setStyle("-fx-text-fill: #005F40");
         } else {
             subscribeStatusField.setText(ResourceBundleUtil.getStringValue("settings_subscribe_status_invalid"));
@@ -115,7 +118,7 @@ public class SettingsController implements Initializable {
         try {
             int delay = Integer.parseInt(checkDelayField.getText());
 
-            if (!isSubscribed()) {
+            if (!subscribe.isSubscribed()) {
                 //未订阅用户
                 if (delay < 180) {
                     delayErrorLabel.setText(ResourceBundleUtil.getStringValue("settings_free_user_delay_cant_less_than"));
@@ -140,14 +143,6 @@ public class SettingsController implements Initializable {
             delayErrorLabel.setVisible(true);
             return false;
         }
-    }
-
-    private boolean isSubscribed() {
-        return true;
-    }
-
-    private String getSubscribeValidity() {
-        return "2024/03/01";
     }
 
     @FXML
