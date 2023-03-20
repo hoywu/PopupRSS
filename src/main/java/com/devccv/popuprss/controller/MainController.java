@@ -38,9 +38,8 @@ import javafx.util.Duration;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
 import static com.devccv.popuprss.ResourcesLoader.loadURL;
@@ -80,7 +79,7 @@ public class MainController implements Initializable {
     private final ToggleGroup toggleGroup;
     private ObservableList<Node> navBarChildren;
     private ObservableList<Node> contentPaneChildren;
-    private final Map<String, Node> subViews = new HashMap<>();
+    private final ConcurrentHashMap<Integer, Node> subViews = new ConcurrentHashMap<>();
 
     public MainController(Stage stage) {
         this.stage = stage;
@@ -106,8 +105,9 @@ public class MainController implements Initializable {
         contentPaneChildren = contentPane.getChildren();
         //载入侧边栏
         navBarChildren = navBar.getChildren();
-        addSideBarItem("Logs", "mfx-content-paste", getStringValue("list_logs"), "fxml/Logs.fxml", true);
-        addSideBarItem("Archived", "mfx-bars", getStringValue("list_archived"), "fxml/Archived.fxml", false);
+        addSideBarItem(0, "mfx-content-paste", getStringValue("list_logs"), "fxml/Logs.fxml", true);
+        addSideBarItem(1, "mfx-bars", getStringValue("list_archived"), "fxml/Archived.fxml", false);
+        addSideBarItem(2, "mfx-gear", getStringValue("list_settings"), "fxml/Settings.fxml", false);
         //设置顶部状态栏
         Rectangle clip = new Rectangle(100, 16);
         clip.setArcHeight(10);
@@ -131,21 +131,28 @@ public class MainController implements Initializable {
         };
     }
 
-    private void addSideBarItem(String viewName, String icon, String text, String fxml, boolean defaultSelected) {
+    private void addSideBarItem(int viewNum, String icon, String text, String fxml, boolean defaultSelected) {
         //添加选择卡到侧边栏
         ToggleButton toggle = createToggle(icon, text);
-        EventHandler<ActionEvent> handler = event -> {
-            LogsViewController.stopUpdateLogUI.set(!"Logs".equals(viewName));
-            if (!subViews.containsKey(viewName)) {
-                FXMLLoader fxmlLoader = new FXMLLoader(loadURL(fxml), ResourceBundleUtil.resource);
-                try {
-                    fxmlLoader.load();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-                subViews.put(viewName, fxmlLoader.getRoot());
+        //异步载入子视图
+        App.FIXED_THREAD_POOL.submit(() -> {
+            FXMLLoader fxmlLoader = new FXMLLoader(loadURL(fxml), ResourceBundleUtil.resource);
+            try {
+                fxmlLoader.load();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
-            contentPaneChildren.setAll(subViews.get(viewName));
+            subViews.put(viewNum, fxmlLoader.getRoot());
+        });
+        EventHandler<ActionEvent> handler = event -> {
+            LogsViewController.stopUpdateLogUI.set(viewNum != 0);
+            while (!subViews.containsKey(viewNum)) {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException ignored) {
+                }
+            }
+            contentPaneChildren.setAll(subViews.get(viewNum));
         };
         toggle.setOnAction(handler);
         if (defaultSelected) {
@@ -164,6 +171,11 @@ public class MainController implements Initializable {
         toggleNode.setToggleGroup(toggleGroup);
         toggleNode.getStyleClass().add("side-bar-toggle-node");
         return toggleNode;
+    }
+
+    public void onMouseClickedRoot() {
+        //取消所有控件焦点
+        root.requestFocus();
     }
 
     @FXML

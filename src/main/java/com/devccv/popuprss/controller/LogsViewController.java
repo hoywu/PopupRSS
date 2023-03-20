@@ -48,12 +48,10 @@ public class LogsViewController implements Initializable {
         icon.setFitWidth(16);
         icon.setFitHeight(16);
         pauseButton.setLabelLeadingIcon(icon);
-        pauseButton.setLabelTrailingIcon(null);
         icon = new ImageView(new Image(ResourcesLoader.loadStream("icon/clear.png")));
         icon.setFitWidth(16);
         icon.setFitHeight(16);
         clearButton.setLabelLeadingIcon(icon);
-        clearButton.setLabelTrailingIcon(null);
 
         //开启日志刷新线程
         stopUpdateLogUI.set(false);
@@ -81,7 +79,7 @@ public class LogsViewController implements Initializable {
 
     @FXML
     protected void onMouseClickedClearBtn() {
-        logsTextArea.setText("[" + App.DATE_TIME_FORMATTER.format(LocalDateTime.now()) + "] " + ResourceBundleUtil.getStringValue("clear_log"));
+        logsTextArea.setText("[" + App.DATE_TIME_FORMATTER.format(LocalDateTime.now()) + "] " + ResourceBundleUtil.getStringValue("log_clear"));
         clearButton.setSelected(false);
         System.gc();
     }

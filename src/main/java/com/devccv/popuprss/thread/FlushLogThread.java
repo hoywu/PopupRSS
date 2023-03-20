@@ -34,7 +34,6 @@ public class FlushLogThread extends Thread {
                 flush();
             }
         } catch (InterruptedException e) {
-            return;
         } finally {
             lock.unlock();
         }
@@ -49,7 +48,7 @@ public class FlushLogThread extends Thread {
             Platform.runLater(logsTextArea::clear);
             System.gc();
             Platform.runLater(() -> logsTextArea.setText("[" + App.DATE_TIME_FORMATTER.format(LocalDateTime.now()) + "] "
-                    + ResourceBundleUtil.getStringValue("rotate_log")));
+                    + ResourceBundleUtil.getStringValue("log_rotate")));
         }
         Platform.runLater(() -> logsTextArea.appendText(stringBuilder.toString()));
     }

@@ -10,8 +10,9 @@
       xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.devccv.popuprss.controller.MainController">
     <AnchorPane maxHeight="450.0" maxWidth="750.0" onMouseDragged="#onMouseDraggedRoot"
-                onMousePressed="#onMousePressedRoot" onMouseReleased="#onMouseReleasedRoot" prefHeight="450.0"
-                prefWidth="750.0" styleClass="root-pane">
+                onMousePressed="#onMousePressedRoot" onMouseReleased="#onMouseReleasedRoot"
+                onMouseClicked="#onMouseClickedRoot"
+                prefHeight="450.0" prefWidth="750.0" styleClass="root-pane">
         <VBox prefHeight="450.0" prefWidth="550.0" styleClass="right-pane" AnchorPane.rightAnchor="0.0">
             <padding>
                 <Insets bottom="10.0" left="10.0" right="10.0" top="8.0"/>

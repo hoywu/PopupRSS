@@ -1,6 +1,7 @@
 package com.devccv.popuprss;
 
 import com.devccv.popuprss.controller.MainController;
+import com.devccv.popuprss.util.ConfigManager;
 import com.devccv.popuprss.util.ResourceBundleUtil;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -17,13 +18,20 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class App extends Application {
-    public static final ExecutorService FIXED_THREAD_POOL = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+    public static final ExecutorService FIXED_THREAD_POOL = Executors.newFixedThreadPool(5);
     public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @Override
     public void start(Stage primaryStage) throws IOException {
         System.setProperty("prism.lcdtext", "false");
-        Locale.setDefault(Locale.CHINA);
+
+        //读取配置文件，设置语言
+        if ("Chinese".equals(ConfigManager.CONFIG.getLanguage())) {
+            Locale.setDefault(Locale.CHINA);
+        } else {
+            Locale.setDefault(Locale.US);
+        }
+
         FXMLLoader fxmlLoader = new FXMLLoader(ResourcesLoader.loadURL("fxml/main-view.fxml"), ResourceBundleUtil.resource);
         fxmlLoader.setControllerFactory(c -> new MainController(primaryStage));
         Scene scene = new Scene(fxmlLoader.load());

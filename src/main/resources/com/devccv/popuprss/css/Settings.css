@@ -1,0 +1,19 @@
+.mfx-text-field {
+    -fx-font-family: "Sarasa Mono Slab SC";
+    -mfx-allow-copy: true;
+    -mfx-allow-cut: true;
+    -mfx-allow-paste: true;
+}
+
+.mfx-text-field .floating-text {
+    -fx-font-family: "Sarasa Mono Slab SC";
+    -fx-text-fill: #A8ABB2;
+}
+
+.mfx-text-field:focus-within {
+    -fx-border-color: #1CAD7E;
+}
+
+.mfx-text-field:focus-within .floating-text {
+    -fx-text-fill: #1CAD7E;
+}

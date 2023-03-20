@@ -3,6 +3,8 @@ package com.devccv.popuprss.util;
 import com.devccv.popuprss.ResourcesLoader;
 import com.devccv.popuprss.bean.Config;
 import com.devccv.popuprss.controller.LogsViewController;
+import com.devccv.popuprss.controller.MainController;
+import javafx.application.Platform;
 
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
@@ -32,11 +34,13 @@ public class ConfigManager {
             try (FileReader in = new FileReader("settings.properties", StandardCharsets.UTF_8)) {
                 SETTINGS.load(in);
             } catch (IOException exception) {
-                LogsViewController.newLog(ResourceBundleUtil.getStringValue("read_config_error"));
+                LogsViewController.newLog(ResourceBundleUtil.getStringValue("log_read_config_error"));
             }
+            Platform.runLater(() -> MainController.switchToDisableStatus.accept(ResourceBundleUtil.getStringValue("status_ready")));
         } else {
             //没有用户配置则生成默认配置
             saveSettingsProperties(SETTINGS);
+            Platform.runLater(() -> MainController.switchToDisableStatus.accept(ResourceBundleUtil.getStringValue("status_first_start")));
         }
 
         //从配置生成Config对象
@@ -57,7 +61,7 @@ public class ConfigManager {
                 if (property == null) continue;
                 String typeName = descriptor.getPropertyType().getTypeName();
                 switch (typeName) {
-                    case "String" -> descriptor.getWriteMethod().invoke(config, property);
+                    case "java.lang.String" -> descriptor.getWriteMethod().invoke(config, property);
                     case "boolean" -> descriptor.getWriteMethod().invoke(config, Boolean.parseBoolean(property));
                     case "int" -> descriptor.getWriteMethod().invoke(config, Integer.parseInt(property));
                     case "long" -> descriptor.getWriteMethod().invoke(config, Long.parseLong(property));
@@ -77,6 +81,8 @@ public class ConfigManager {
     private static Properties toPropertiesObj(Config config, String prefix) {
         //将Config对象转换为Properties
         Properties properties = new Properties();
+        if (prefix == null) prefix = "";
+        else if (!prefix.isEmpty() && !prefix.endsWith(".")) prefix += ".";
 
         try {
             BeanInfo beanInfo = Introspector.getBeanInfo(Config.class, Object.class);
@@ -97,7 +103,7 @@ public class ConfigManager {
         try (OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream("settings.properties"), StandardCharsets.UTF_8)) {
             properties.store(out, "PopupRSS - User Settings");
         } catch (IOException e) {
-            LogsViewController.newLog(ResourceBundleUtil.getStringValue("write_config_error"));
+            LogsViewController.newLog(ResourceBundleUtil.getStringValue("log_write_config_error"));
         }
     }
 

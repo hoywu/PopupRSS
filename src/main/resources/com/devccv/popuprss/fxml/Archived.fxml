@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <AnchorPane prefHeight="408.0" prefWidth="530.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.devccv.popuprss.controller.ArchivedViewController">
-
+            fx:controller="com.devccv.popuprss.controller.ArchivedViewController" stylesheets="@../css/Archived.css">
+    <TableView fx:id="table" prefHeight="408.0" prefWidth="529.0" styleClass="table"/>
 </AnchorPane>

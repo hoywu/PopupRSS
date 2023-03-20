@@ -1,7 +1,26 @@
 package com.devccv.popuprss.bean;
 
 public class Config {
+    private String language;
+    private String rssLink;
     private int checkDelay;
+    private boolean checkOnStart;
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public String getRssLink() {
+        return rssLink;
+    }
+
+    public void setRssLink(String rssLink) {
+        this.rssLink = rssLink;
+    }
 
     public int getCheckDelay() {
         return checkDelay;
@@ -9,5 +28,13 @@ public class Config {
 
     public void setCheckDelay(int checkDelay) {
         this.checkDelay = checkDelay;
+    }
+
+    public boolean isCheckOnStart() {
+        return checkOnStart;
+    }
+
+    public void setCheckOnStart(boolean checkOnStart) {
+        this.checkOnStart = checkOnStart;
     }
 }
