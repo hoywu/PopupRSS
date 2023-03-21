@@ -16,7 +16,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
 
-public class ArchivedViewController implements Initializable {
+public final class ArchivedViewController implements Initializable {
     @FXML
     private TableView<Record> table;
     private ObservableList<Record> tableItems;

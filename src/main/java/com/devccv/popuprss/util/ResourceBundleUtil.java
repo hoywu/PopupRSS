@@ -6,7 +6,7 @@ import javafx.scene.text.Font;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-public class ResourceBundleUtil {
+public final class ResourceBundleUtil {
     public static ResourceBundle resource;
     public static Font titleFont;
     public static Font subTitleFont;

@@ -6,7 +6,6 @@ import com.devccv.popuprss.subscribe.Subscribe;
 import com.devccv.popuprss.util.ConfigManager;
 import com.devccv.popuprss.util.Encrypt;
 import com.devccv.popuprss.util.ResourceBundleUtil;
-import com.devccv.popuprss.widget.MyToggleNode;
 import io.github.palexdev.materialfx.controls.*;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -26,7 +25,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class SettingsController implements Initializable {
+public final class SettingsController implements Initializable {
     private static final Subscribe subscribe = new MicrosoftStore();
     @FXML
     private MFXTextField subscribeStatusField;
@@ -41,15 +40,15 @@ public class SettingsController implements Initializable {
     @FXML
     private MFXTextField checkDelayField;
     @FXML
-    public MFXRadioButton proxyNo;
+    private MFXRadioButton proxyNo;
     @FXML
-    public MFXRadioButton proxyHTTP;
+    private MFXRadioButton proxyHTTP;
     @FXML
-    public MFXRadioButton proxySOCKS;
+    private MFXRadioButton proxySOCKS;
     @FXML
-    public MFXTextField proxyURLField;
+    private MFXTextField proxyURLField;
     @FXML
-    public Label proxyErrorLabel;
+    private Label proxyErrorLabel;
     @FXML
     private Label delayErrorLabel;
     @FXML
@@ -57,7 +56,7 @@ public class SettingsController implements Initializable {
     @FXML
     private MFXCheckbox autoPopupCheckbox;
     @FXML
-    private MyToggleNode saveButton;
+    private MFXRectangleToggleNode saveButton;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -195,7 +194,7 @@ public class SettingsController implements Initializable {
         boolean isValid = true;
         String errorMessage = null;
         if (proxyHTTP.isSelected() && !proxyURL.isBlank()) {
-            if (!proxyURL.startsWith("http://") && !proxyURL.startsWith("https://")) {
+            if (!proxyURL.startsWith("http://")) {
                 errorMessage = ResourceBundleUtil.getStringValue("settings_http_proxy_url_must_start_with");
                 isValid = false;
             }
@@ -218,7 +217,7 @@ public class SettingsController implements Initializable {
     }
 
     @FXML
-    public void onMouseClickedSaveBtn() {
+    private void onMouseClickedSaveBtn() {
         saveButton.setDisable(true);
         saveButton.setSelected(false);
 

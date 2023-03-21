@@ -1,6 +1,6 @@
 package com.devccv.popuprss.bean;
 
-public class Record {
+public final class Record {
     private String time;
     private String level;
     private String language;

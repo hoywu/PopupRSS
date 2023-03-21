@@ -14,7 +14,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
-public class CSV {
+public final class CSV {
     private static final Path archivedCSV = Path.of("archived/archived.csv");
 
     public static List<Record> readArchived() {

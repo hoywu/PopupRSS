@@ -1,6 +1,6 @@
 package com.devccv.popuprss.bean;
 
-public class Config {
+public final class Config {
     private String version = "1.0";
     private String language;
     private String rssLink;

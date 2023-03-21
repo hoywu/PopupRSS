@@ -3,7 +3,7 @@ package com.devccv.popuprss;
 import java.io.InputStream;
 import java.net.URL;
 
-public class ResourcesLoader {
+public final class ResourcesLoader {
     private ResourcesLoader() {
     }
 

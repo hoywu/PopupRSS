@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 
-public class FlushLogThread extends Thread {
+public final class FlushLogThread extends Thread {
     private final TextArea logsTextArea;
     private final Lock lock;
     private final Condition condition;

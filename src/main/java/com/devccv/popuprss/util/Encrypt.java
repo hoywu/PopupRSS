@@ -13,7 +13,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Objects;
 
-public class Encrypt {
+public final class Encrypt {
     private static final java.util.Base64.Encoder base64Encoder = java.util.Base64.getEncoder();
     private static final java.util.Base64.Decoder base64Decoder = java.util.Base64.getDecoder();
 

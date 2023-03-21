@@ -57,3 +57,7 @@
     -fx-font-family: 'Sarasa Mono Slab SC';
     -mfx-main: #1CAD7E;
 }
+
+.mfx-rectangle-toggle-node .mfx-ripple-generator {
+    -mfx-ripple-color: #4a90e2;
+}

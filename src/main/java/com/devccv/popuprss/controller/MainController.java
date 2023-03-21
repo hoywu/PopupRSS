@@ -45,7 +45,7 @@ import java.util.function.Consumer;
 import static com.devccv.popuprss.ResourcesLoader.loadURL;
 import static com.devccv.popuprss.util.ResourceBundleUtil.getStringValue;
 
-public class MainController implements Initializable {
+public final class MainController implements Initializable {
     @FXML
     private HBox root;
     private final Stage stage;
@@ -179,7 +179,7 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    protected void onMousePressedRoot(MouseEvent event) {
+    private void onMousePressedRoot(MouseEvent event) {
         //记录鼠标点击位置
         mousePressedX = event.getSceneX();
         mousePressedY = event.getSceneY();
@@ -188,20 +188,20 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    protected void onMouseReleasedRoot() {
+    private void onMouseReleasedRoot() {
         //开启日志输出
         LogsViewController.stopUpdateLogUI.set(false);
     }
 
     @FXML
-    protected void onMouseDraggedRoot(MouseEvent event) {
+    private void onMouseDraggedRoot(MouseEvent event) {
         //拖拽移动窗口
         stage.setX(event.getScreenX() - mousePressedX);
         stage.setY(event.getScreenY() - mousePressedY);
     }
 
     @FXML
-    protected void onMouseClickedCloseIcon(MouseEvent event) {
+    private void onMouseClickedCloseIcon(MouseEvent event) {
         //关闭线程池，退出
         if (event.getButton() == MouseButton.PRIMARY) {
             App.FIXED_THREAD_POOL.shutdown();

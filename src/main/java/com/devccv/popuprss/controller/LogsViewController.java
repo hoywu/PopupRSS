@@ -5,7 +5,6 @@ import com.devccv.popuprss.ResourcesLoader;
 import com.devccv.popuprss.thread.FlushLogThread;
 import com.devccv.popuprss.thread.RSSMonitorThread;
 import com.devccv.popuprss.util.ResourceBundleUtil;
-import com.devccv.popuprss.widget.MyToggleNode;
 import io.github.palexdev.materialfx.controls.MFXRectangleToggleNode;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -23,7 +22,7 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class LogsViewController implements Initializable {
+public final class LogsViewController implements Initializable {
     public static AtomicBoolean stopUpdateLogUI = new AtomicBoolean(true);
     public static AtomicBoolean pauseButtonSelected = new AtomicBoolean(false);
     private static FlushLogThread FLUSH_LOG_THREAD;
@@ -34,11 +33,11 @@ public class LogsViewController implements Initializable {
     private TextArea logsTextArea;
     public static final BlockingQueue<String> logHolder = new LinkedBlockingQueue<>();
     @FXML
-    public MFXRectangleToggleNode startButton;
+    private MFXRectangleToggleNode startButton;
     @FXML
     private MFXRectangleToggleNode pauseButton;
     @FXML
-    private MyToggleNode clearButton;
+    private MFXRectangleToggleNode clearButton;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -99,7 +98,7 @@ public class LogsViewController implements Initializable {
     }
 
     @FXML
-    protected void onMouseClickedClearBtn() {
+    private void onMouseClickedClearBtn() {
         //清空日志
         logsTextArea.setText("[" + App.DATE_TIME_FORMATTER.format(LocalDateTime.now()) + "] " + ResourceBundleUtil.getStringValue("log_clear"));
         clearButton.setSelected(false);
@@ -107,7 +106,7 @@ public class LogsViewController implements Initializable {
     }
 
     @FXML
-    protected void onMouseClickedPauseBtn() {
+    private void onMouseClickedPauseBtn() {
         //暂停日志，清理内存
         pauseButtonSelected.set(pauseButton.isSelected());
         System.gc();

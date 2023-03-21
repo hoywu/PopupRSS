@@ -18,7 +18,7 @@ import java.nio.file.Path;
 import java.util.Locale;
 import java.util.Properties;
 
-public class ConfigManager {
+public final class ConfigManager {
     public static final Properties SETTINGS = new Properties();
     public static final Config CONFIG;
 
@@ -37,7 +37,11 @@ public class ConfigManager {
             } catch (IOException exception) {
                 LogsViewController.newLog(ResourceBundleUtil.getStringValue("log_read_config_error"));
             }
-            Platform.runLater(() -> MainController.switchToDisableStatus.accept(ResourceBundleUtil.getStringValue("status_ready")));
+            if (SETTINGS.getProperty("config.rssLink").isBlank()) {
+                Platform.runLater(() -> MainController.switchToErrorStatus.accept(ResourceBundleUtil.getStringValue("status_no_rss_link")));
+            } else {
+                Platform.runLater(() -> MainController.switchToErrorStatus.accept(ResourceBundleUtil.getStringValue("status_ready")));
+            }
         } else {
             //没有用户配置则生成默认配置
             if (!"zh".equals(Locale.getDefault().getLanguage())) {
@@ -46,7 +50,7 @@ public class ConfigManager {
                 SETTINGS.setProperty("config.language", "Chinese");
             }
             saveSettingsProperties(SETTINGS);
-            Platform.runLater(() -> MainController.switchToDisableStatus.accept(ResourceBundleUtil.getStringValue("status_first_start")));
+            Platform.runLater(() -> MainController.switchToErrorStatus.accept(ResourceBundleUtil.getStringValue("status_first_start")));
         }
 
         //从配置生成Config对象
@@ -54,12 +58,12 @@ public class ConfigManager {
     }
 
     private static Config toConfigObj(Properties properties, String prefix) {
+        //将Properties以指定prefix转为Config
         if (prefix == null) prefix = "";
         else if (!prefix.isEmpty() && !prefix.endsWith(".")) prefix += ".";
 
-        Config config;
+        Config config = new Config();
         try {
-            config = new Config();
             BeanInfo beanInfo = Introspector.getBeanInfo(Config.class, Object.class);
             PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
             for (PropertyDescriptor descriptor : propertyDescriptors) {
@@ -69,7 +73,7 @@ public class ConfigManager {
                 switch (typeName) {
                     case "java.lang.String" -> descriptor.getWriteMethod().invoke(config, property);
                     case "boolean" -> descriptor.getWriteMethod().invoke(config, Boolean.parseBoolean(property));
-                    case "int" -> descriptor.getWriteMethod().invoke(config, Integer.parseInt(property));
+                    case "int" -> descriptor.getWriteMethod().invoke(config, Integer.parseUnsignedInt(property));
                     case "long" -> descriptor.getWriteMethod().invoke(config, Long.parseLong(property));
                     case "char" -> descriptor.getWriteMethod().invoke(config, property.charAt(0));
                     case "float" -> descriptor.getWriteMethod().invoke(config, Float.parseFloat(property));
@@ -79,7 +83,8 @@ public class ConfigManager {
                 }
             }
         } catch (IntrospectionException | IllegalAccessException | InvocationTargetException e) {
-            throw new RuntimeException(e);
+            //下面的语句是不必要的，格式错误也不会导致此处异常
+            Platform.runLater(() -> MainController.switchToErrorStatus.accept(ResourceBundleUtil.getStringValue("status_config_error")));
         }
         return config;
     }

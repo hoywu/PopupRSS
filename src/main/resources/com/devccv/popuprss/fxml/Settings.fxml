@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.devccv.popuprss.widget.MyToggleNode?>
 <?import io.github.palexdev.materialfx.controls.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
@@ -82,12 +81,12 @@
         </HBox>
 
         <HBox alignment="CENTER_RIGHT">
-            <MyToggleNode fx:id="saveButton" disable="true" onMouseClicked="#onMouseClickedSaveBtn" prefHeight="30.0"
-                          prefWidth="92.0" rippleColor="#4a90e2" text="%save_config_button">
+            <MFXRectangleToggleNode fx:id="saveButton" disable="true" onMouseClicked="#onMouseClickedSaveBtn"
+                                    prefHeight="30.0" prefWidth="92.0" text="%save_config_button">
                 <font>
                     <Font name="Sarasa Mono Slab SC" size="12.0"/>
                 </font>
-            </MyToggleNode>
+            </MFXRectangleToggleNode>
         </HBox>
     </VBox>
 </AnchorPane>

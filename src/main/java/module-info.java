@@ -7,5 +7,4 @@ module com.devccv.popuprss {
     opens com.devccv.popuprss.bean to javafx.base;
     opens com.devccv.popuprss.controller to javafx.fxml;
     opens com.devccv.popuprss.util to javafx.fxml;
-    opens com.devccv.popuprss.widget to javafx.fxml;
 }

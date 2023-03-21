@@ -15,16 +15,18 @@
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0.1, 0, 0);
 }
 
-.pause-btn {
-    -mfx-selected-color: #F5A623;
+.mfx-rectangle-toggle-node {
     -mfx-selected-border-color: transparent;
 }
 
-.clear-btn {
-    -mfx-selected-border-color: transparent;
+.pause-btn {
+    -mfx-selected-color: #F5A623;
 }
 
 .start-btn {
     -mfx-selected-color: #4AAA4D;
-    -mfx-selected-border-color: transparent;
+}
+
+.clear-btn .mfx-ripple-generator {
+    -mfx-ripple-color: #284047;
 }

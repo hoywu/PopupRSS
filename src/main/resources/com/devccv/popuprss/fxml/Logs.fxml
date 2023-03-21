@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.devccv.popuprss.widget.MyToggleNode?>
 <?import io.github.palexdev.materialfx.controls.MFXRectangleToggleNode?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.*?>
@@ -16,8 +15,8 @@
             <HBox HBox.hgrow="ALWAYS"/>
             <MFXRectangleToggleNode fx:id="pauseButton" onAction="#onMouseClickedPauseBtn" prefHeight="30.0"
                                     prefWidth="92.0" styleClass="pause-btn" text="%pause_log_button"/>
-            <MyToggleNode fx:id="clearButton" onMouseClicked="#onMouseClickedClearBtn" prefHeight="30.0"
-                          prefWidth="92.0" styleClass="clear-btn" text="%clear_log_button" rippleColor="#284047"/>
+            <MFXRectangleToggleNode fx:id="clearButton" onMouseClicked="#onMouseClickedClearBtn" prefHeight="30.0"
+                                    prefWidth="92.0" styleClass="clear-btn" text="%clear_log_button"/>
         </HBox>
     </VBox>
 </AnchorPane>

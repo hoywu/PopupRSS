@@ -5,7 +5,7 @@ import com.devccv.popuprss.bean.Record;
 import java.util.ArrayList;
 import java.util.List;
 
-public class XML {
+public final class XML {
     public static List<Record> parseRecord(String xml) {
         ArrayList<Record> list = new ArrayList<>();
         String time;
