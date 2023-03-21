@@ -62,11 +62,13 @@ public final class ArchivedViewController implements Initializable {
         //新记录添加监听器
         table.itemsProperty().addListener((observable, oldValue, newValue) -> {
             table.scrollTo(newValue.size() - 1);
-            CSV.appendArchived(newValue.get(newValue.size() - 1));
         });
 
         //构造供外部调用的添加记录方法
         tableItems = table.getItems();
-        newRecord = record -> tableItems.add(record);
+        newRecord = record -> {
+            tableItems.add(record);
+            CSV.appendArchived(record);
+        };
     }
 }

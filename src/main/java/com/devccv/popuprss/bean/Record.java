@@ -1,6 +1,7 @@
 package com.devccv.popuprss.bean;
 
 public final class Record {
+    private String fullTitle;
     private String time;
     private String level;
     private String language;
@@ -13,7 +14,8 @@ public final class Record {
     public Record() {
     }
 
-    public Record(String time, String level, String language, String title, String description, String units, String reward, String link) {
+    public Record(String fullTitle, String time, String level, String language, String title, String description, String units, String reward, String link) {
+        this.fullTitle = fullTitle;
         this.time = time;
         this.level = level;
         this.language = language;
@@ -22,6 +24,14 @@ public final class Record {
         this.units = units;
         this.reward = reward;
         this.link = link;
+    }
+
+    public String getFullTitle() {
+        return fullTitle;
+    }
+
+    public void setFullTitle(String fullTitle) {
+        this.fullTitle = fullTitle;
     }
 
     public String getTime() {

@@ -205,7 +205,7 @@ public final class MainController implements Initializable {
     private void onMouseClickedCloseIcon(MouseEvent event) {
         //关闭线程池，退出
         if (event.getButton() == MouseButton.PRIMARY) {
-            App.FIXED_THREAD_POOL.shutdown();
+            App.FIXED_THREAD_POOL.shutdownNow();
             LogsViewController.tryShutdownFlushLogThread();
             Platform.exit();
         }

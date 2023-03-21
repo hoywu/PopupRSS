@@ -24,7 +24,7 @@ public final class CSV {
         try (Scanner scanner = new Scanner(new FileInputStream(archivedCSV.toFile()), StandardCharsets.UTF_8)) {
             while (scanner.hasNextLine() && counter++ < 1000) {
                 String[] data = scanner.nextLine().split(",");
-                list.add(new Record(data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7]));
+                list.add(new Record(null, data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7]));
             }
         } catch (Exception e) {
             LogsViewController.newLog(ResourceBundleUtil.getStringValue("log_read_archived_error"));
@@ -35,7 +35,9 @@ public final class CSV {
     public static void appendArchived(Record record) {
         checkFileExists();
         try (OutputStreamWriter output = new OutputStreamWriter(new FileOutputStream(archivedCSV.toFile(), true), StandardCharsets.UTF_8)) {
-            String data = record.getTime() + "," + record.getLevel() + "," + record.getLanguage() + "," + record.getTitle() + "," + record.getDescription() + "," + record.getUnits() + "," + record.getReward() + "," + record.getLink();
+            String data = record.getTime().replace(',', ';') + "," + record.getLevel() + "," +
+                    record.getLanguage() + "," + record.getTitle().replace(',', ';') + "," +
+                    record.getDescription().replace(',', ';') + "," + record.getUnits() + "," + record.getReward() + "," + record.getLink();
             output.append(data).append("\n");
         } catch (IOException e) {
             LogsViewController.newLog(ResourceBundleUtil.getStringValue("log_append_archived_error"));
