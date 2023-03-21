@@ -23,6 +23,9 @@
                           selectable="false" fx:id="subscribeStatusField" prefWidth="108.0" floatMode="BORDER"/>
             <MFXTextField allowEdit="false" caretVisible="false" floatingText="%settings_validity_period"
                           selectable="false" fx:id="subscribeValidity" prefWidth="108.0" floatMode="BORDER"/>
+            <HBox HBox.hgrow="ALWAYS"/>
+            <MFXComboBox fx:id="languageCombo" floatMode="BORDER" floatingText="%settings_language" prefHeight="35.0"
+                         prefWidth="120.0" styleClass="language-combo"/>
         </HBox>
 
         <HBox alignment="CENTER" spacing="2">
@@ -42,16 +45,30 @@
                               prefWidth="510.0"/>
         </HBox>
 
-        <HBox spacing="10">
+        <HBox alignment="CENTER_RIGHT" spacing="10">
             <padding>
                 <Insets top="16.0"/>
             </padding>
-            <MFXComboBox fx:id="languageCombo" floatMode="BORDER" floatingText="%settings_language" prefHeight="35.0"
-                         prefWidth="120.0" styleClass="language-combo"/>
+            <MFXRadioButton fx:id="proxyNo" text="%settings_no_proxy" selected="true"/>
+            <MFXRadioButton fx:id="proxyHTTP" text="HTTP"/>
+            <MFXRadioButton fx:id="proxySOCKS" text="SOCKS"/>
+        </HBox>
+
+        <HBox spacing="10">
             <VBox spacing="2">
                 <MFXTextField fx:id="checkDelayField" floatMode="BORDER" floatingText="%settings_checkDelay"
                               prefHeight="35.0" prefWidth="140.0" text="120"/>
                 <Label fx:id="delayErrorLabel" textFill="#ef6e6b" visible="false" wrapText="true">
+                    <font>
+                        <Font name="Sarasa Mono Slab SC" size="11.0"/>
+                    </font>
+                </Label>
+            </VBox>
+            <HBox HBox.hgrow="ALWAYS"/>
+            <VBox spacing="2" alignment="CENTER_RIGHT">
+                <MFXTextField floatMode="BORDER" floatingText="Proxy URL" prefHeight="35.0" prefWidth="190.0"
+                              fx:id="proxyURLField"/>
+                <Label fx:id="proxyErrorLabel" textFill="#ef6e6b" visible="false" wrapText="true">
                     <font>
                         <Font name="Sarasa Mono Slab SC" size="11.0"/>
                     </font>

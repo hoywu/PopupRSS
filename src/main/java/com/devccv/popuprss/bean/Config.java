@@ -5,6 +5,8 @@ public class Config {
     private String language;
     private String rssLink;
     private int checkDelay;
+    private String proxy;
+    private String proxyURL;
     private boolean checkOnStart;
     private boolean autoPopup;
 
@@ -38,6 +40,22 @@ public class Config {
 
     public void setCheckDelay(int checkDelay) {
         this.checkDelay = checkDelay;
+    }
+
+    public String getProxy() {
+        return proxy;
+    }
+
+    public void setProxy(String proxy) {
+        this.proxy = proxy;
+    }
+
+    public String getProxyURL() {
+        return proxyURL;
+    }
+
+    public void setProxyURL(String proxyURL) {
+        this.proxyURL = proxyURL;
     }
 
     public boolean isCheckOnStart() {

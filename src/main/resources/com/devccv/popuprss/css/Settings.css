@@ -52,3 +52,8 @@
 .mfx-checkbox .mfx-ripple-generator {
     -mfx-ripple-color: #A8ABB2;
 }
+
+.mfx-radio-button {
+    -fx-font-family: 'Sarasa Mono Slab SC';
+    -mfx-main: #1CAD7E;
+}

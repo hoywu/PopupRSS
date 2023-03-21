@@ -3,6 +3,7 @@ package com.devccv.popuprss.controller;
 import com.devccv.popuprss.App;
 import com.devccv.popuprss.ResourcesLoader;
 import com.devccv.popuprss.thread.FlushLogThread;
+import com.devccv.popuprss.thread.RSSMonitorThread;
 import com.devccv.popuprss.util.ResourceBundleUtil;
 import com.devccv.popuprss.widget.MyToggleNode;
 import io.github.palexdev.materialfx.controls.MFXRectangleToggleNode;
@@ -26,6 +27,7 @@ public class LogsViewController implements Initializable {
     public static AtomicBoolean stopUpdateLogUI = new AtomicBoolean(true);
     public static AtomicBoolean pauseButtonSelected = new AtomicBoolean(false);
     private static FlushLogThread FLUSH_LOG_THREAD;
+    private static RSSMonitorThread RSS_MONITOR_THREAD;
     private static final Lock flushLogLock = new ReentrantLock();
     private static final Condition canFlushCondition = flushLogLock.newCondition();
     @FXML
@@ -87,7 +89,13 @@ public class LogsViewController implements Initializable {
 
     @FXML
     public void onMouseClickedStartBtn() {
-        //创建线程开始监视RSS
+        //启停RSS监视线程
+        if (startButton.isSelected()) {
+            RSS_MONITOR_THREAD = new RSSMonitorThread();
+            RSS_MONITOR_THREAD.start();
+        } else {
+            RSS_MONITOR_THREAD.interrupt();
+        }
     }
 
     @FXML
