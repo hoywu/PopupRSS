@@ -17,7 +17,7 @@ import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class App extends Application {
+public final class App extends Application {
     public static final ExecutorService FIXED_THREAD_POOL = Executors.newFixedThreadPool(5);
     public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 

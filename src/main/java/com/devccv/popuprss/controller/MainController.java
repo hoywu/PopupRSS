@@ -55,21 +55,21 @@ public final class MainController implements Initializable {
     public static Consumer<String> switchToEnableStatus; //需要使用Platform.runLater在UI线程调用
     public static Consumer<String> switchToDisableStatus; //需要使用Platform.runLater在UI线程调用
     @FXML
-    public HBox statusBar;
+    private HBox statusBar;
     @FXML
-    public Rectangle errorBar;
+    private Rectangle errorBar;
     @FXML
-    public Rectangle enableBar;
+    private Rectangle enableBar;
     @FXML
-    public Rectangle disableBar;
+    private Rectangle disableBar;
     @FXML
-    public Label statusText;
+    private Label statusText;
     @FXML
     private Circle closeIcon;
     @FXML
-    public Label titleLabel;
+    private Label titleLabel;
     @FXML
-    public Label subTitleLabel;
+    private Label subTitleLabel;
     @FXML
     private ImageView logo;
     @FXML
@@ -173,7 +173,8 @@ public final class MainController implements Initializable {
         return toggleNode;
     }
 
-    public void onMouseClickedRoot() {
+    @FXML
+    private void onMouseClickedRoot() {
         //取消所有控件焦点
         root.requestFocus();
     }

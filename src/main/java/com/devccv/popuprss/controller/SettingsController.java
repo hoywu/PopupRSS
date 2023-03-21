@@ -74,15 +74,12 @@ public final class SettingsController implements Initializable {
             Platform.runLater(() -> {
                 try {
                     rssField.setText(Encrypt.decryptWithUserName(rssLink));
-                } catch (InvalidAlgorithmParameterException | NoSuchPaddingException | IllegalBlockSizeException |
-                         NoSuchAlgorithmException | BadPaddingException | InvalidKeyException e) {
-                    LogsViewController.newLog(ResourceBundleUtil.getStringValue("log_decryption_error"));
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    LogsViewController.newLog(ResourceBundleUtil.getStringValue("log_decryption_error"));
                 }
-                rssField.textProperty().addListener((observable, oldValue, newValue) -> saveButton.setDisable(false));
             });
         }
+        rssField.textProperty().addListener((observable, oldValue, newValue) -> saveButton.setDisable(false));
 
         //语言
         languageCombo.getItems().setAll(List.of("Chinese", "English"));
@@ -234,7 +231,9 @@ public final class SettingsController implements Initializable {
         }
 
         //RSS链接
-        if (!rssField.getText().isBlank()) {
+        if (rssField.getText().isBlank()) {
+            ConfigManager.CONFIG.setRssLink("");
+        } else {
             try {
                 String encrypt = Encrypt.encryptWithUserName(rssField.getText());
                 ConfigManager.CONFIG.setRssLink(encrypt);

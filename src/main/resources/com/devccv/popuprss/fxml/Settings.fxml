@@ -76,7 +76,7 @@
         </HBox>
 
         <HBox spacing="10">
-            <MFXCheckbox fx:id="autoStartCheckbox" selected="true" text="%settings_autoStart"/>
+            <MFXCheckbox fx:id="autoStartCheckbox" text="%settings_autoStart"/>
             <MFXCheckbox fx:id="autoPopupCheckbox" selected="true" text="%settings_autoPopup"/>
         </HBox>
 

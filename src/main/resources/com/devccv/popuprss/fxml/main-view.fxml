@@ -11,15 +11,14 @@
       fx:controller="com.devccv.popuprss.controller.MainController">
     <AnchorPane maxHeight="450.0" maxWidth="750.0" onMouseDragged="#onMouseDraggedRoot"
                 onMousePressed="#onMousePressedRoot" onMouseReleased="#onMouseReleasedRoot"
-                onMouseClicked="#onMouseClickedRoot"
-                prefHeight="450.0" prefWidth="750.0" styleClass="root-pane">
+                onMouseClicked="#onMouseClickedRoot" prefHeight="450.0" prefWidth="750.0" styleClass="root-pane">
         <VBox prefHeight="450.0" prefWidth="550.0" styleClass="right-pane" AnchorPane.rightAnchor="0.0">
             <padding>
                 <Insets bottom="10.0" left="10.0" right="10.0" top="8.0"/>
             </padding>
             <HBox prefWidth="550.0">
                 <StackPane>
-                    <HBox alignment="CENTER_LEFT" prefWidth="275.0" spacing="10.0">
+                    <HBox alignment="CENTER_LEFT" prefWidth="450.0" spacing="10.0">
                         <Rectangle fill="transparent" height="16" width="100"/>
                         <Label fx:id="statusText" text="%status_loading"/>
                     </HBox>
@@ -29,7 +28,7 @@
                         <Rectangle fx:id="disableBar" fill="#F5A623" height="16" width="100"/>
                     </HBox>
                 </StackPane>
-                <HBox alignment="CENTER_RIGHT" prefWidth="275.0">
+                <HBox alignment="CENTER_RIGHT" prefWidth="100.0">
                     <Circle fx:id="closeIcon" fill="RED" onMouseClicked="#onMouseClickedCloseIcon" radius="8"
                             styleClass="close-icon"/>
                 </HBox>

@@ -19,8 +19,8 @@ import java.util.Locale;
 import java.util.Properties;
 
 public final class ConfigManager {
-    public static final Properties SETTINGS = new Properties();
     public static final Config CONFIG;
+    private static final Properties SETTINGS = new Properties();
 
     static {
         //从资源读取默认配置
@@ -40,7 +40,7 @@ public final class ConfigManager {
             if (SETTINGS.getProperty("config.rssLink").isBlank()) {
                 Platform.runLater(() -> MainController.switchToErrorStatus.accept(ResourceBundleUtil.getStringValue("status_no_rss_link")));
             } else {
-                Platform.runLater(() -> MainController.switchToErrorStatus.accept(ResourceBundleUtil.getStringValue("status_ready")));
+                Platform.runLater(() -> MainController.switchToDisableStatus.accept(ResourceBundleUtil.getStringValue("status_ready")));
             }
         } else {
             //没有用户配置则生成默认配置

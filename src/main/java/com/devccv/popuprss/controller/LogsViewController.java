@@ -4,14 +4,19 @@ import com.devccv.popuprss.App;
 import com.devccv.popuprss.ResourcesLoader;
 import com.devccv.popuprss.thread.FlushLogThread;
 import com.devccv.popuprss.thread.RSSMonitorThread;
+import com.devccv.popuprss.util.ConfigManager;
+import com.devccv.popuprss.util.Encrypt;
 import com.devccv.popuprss.util.ResourceBundleUtil;
 import io.github.palexdev.materialfx.controls.MFXRectangleToggleNode;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ResourceBundle;
@@ -90,9 +95,39 @@ public final class LogsViewController implements Initializable {
     public void onMouseClickedStartBtn() {
         //启停RSS监视线程
         if (startButton.isSelected()) {
-            RSS_MONITOR_THREAD = new RSSMonitorThread();
+            Proxy proxy;
+            try {
+                if ("HTTP".equals(ConfigManager.CONFIG.getProxy())) {
+                    String proxyURL = ConfigManager.CONFIG.getProxyURL().split("//")[1];
+                    String[] split = proxyURL.split(":");
+                    proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(split[0], Integer.parseInt(split[1].replace("/", ""))));
+                } else if ("SOCKS".equals(ConfigManager.CONFIG.getProxy())) {
+                    String proxyURL = ConfigManager.CONFIG.getProxyURL().split("//")[1];
+                    String[] split = proxyURL.split(":");
+                    proxy = new Proxy(Proxy.Type.SOCKS, new InetSocketAddress(split[0], Integer.parseInt(split[1].replace("/", ""))));
+                } else {
+                    proxy = Proxy.NO_PROXY;
+                }
+            } catch (Exception e) {
+                Platform.runLater(() -> MainController.switchToErrorStatus.accept(ResourceBundleUtil.getStringValue("status_proxy_error")));
+                startButton.setSelected(false);
+                return;
+            }
+
+            URL url;
+            try {
+                url = new URL(Encrypt.decryptWithUserName(ConfigManager.CONFIG.getRssLink()));
+            } catch (Exception e) {
+                Platform.runLater(() -> MainController.switchToErrorStatus.accept(ResourceBundleUtil.getStringValue("status_rss_link_error")));
+                startButton.setSelected(false);
+                return;
+            }
+
+            Platform.runLater(() -> MainController.switchToEnableStatus.accept(ResourceBundleUtil.getStringValue("status_running")));
+            RSS_MONITOR_THREAD = new RSSMonitorThread(proxy, url);
             RSS_MONITOR_THREAD.start();
         } else {
+            Platform.runLater(() -> MainController.switchToDisableStatus.accept(ResourceBundleUtil.getStringValue("status_stop")));
             RSS_MONITOR_THREAD.interrupt();
         }
     }
