@@ -9,7 +9,8 @@
     <VBox AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="45.0" AnchorPane.leftAnchor="0.0"
           AnchorPane.rightAnchor="0.0">
         <TextArea fx:id="logsTextArea" editable="false" prefHeight="350.0" prefWidth="529.0" styleClass="log-area"
-                  text="%log_default" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" wrapText="true"/>
+                  text="%log_default" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" wrapText="true"
+                  scaleShape="false" cacheShape="false" snapToPixel="false"/>
     </VBox>
     <HBox alignment="CENTER_RIGHT" spacing="10.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="0.0"
           AnchorPane.rightAnchor="0.0">
