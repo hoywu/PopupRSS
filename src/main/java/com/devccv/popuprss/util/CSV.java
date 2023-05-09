@@ -35,9 +35,7 @@ public final class CSV {
     public static void appendArchived(Record record) {
         checkFileExists();
         try (OutputStreamWriter output = new OutputStreamWriter(new FileOutputStream(archivedCSV.toFile(), true), StandardCharsets.UTF_8)) {
-            String data = record.getTime().replace(',', ';') + "," + record.getLevel() + "," +
-                    record.getLanguage() + "," + record.getTitle().replace(',', ';') + "," +
-                    record.getDescription().replace(',', ';') + "," + record.getUnits() + "," + record.getReward() + "," + record.getLink();
+            String data = record.getTime() + "," + record.getLevel() + "," + record.getLanguage() + "," + record.getTitle() + "," + record.getDescription() + "," + record.getUnits() + "," + record.getReward() + "," + record.getLink();
             output.append(data).append("\n");
         } catch (IOException e) {
             LogsViewController.newLog(ResourceBundleUtil.getStringValue("log_append_archived_error"));

@@ -18,6 +18,7 @@ public final class FlushLogThread extends Thread {
 
     public FlushLogThread(TextArea logsTextArea, Lock lock, Condition condition) {
         super("FlushLogThread");
+        this.setDaemon(true);
         this.logsTextArea = logsTextArea;
         this.lock = lock;
         this.condition = condition;
@@ -34,6 +35,7 @@ public final class FlushLogThread extends Thread {
                 flush();
             }
         } catch (InterruptedException e) {
+            return;
         } finally {
             lock.unlock();
         }
@@ -44,7 +46,7 @@ public final class FlushLogThread extends Thread {
         while (!LogsViewController.logHolder.isEmpty()) {
             stringBuilder.append(LogsViewController.logHolder.take());
         }
-        if (logsTextArea.getLength() > 10000) {
+        if (logsTextArea.getLength() > 1000000) {
             Platform.runLater(logsTextArea::clear);
             System.gc();
             Platform.runLater(() -> logsTextArea.setText("[" + App.DATE_TIME_FORMATTER.format(LocalDateTime.now()) + "] "

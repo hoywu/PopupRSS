@@ -4,5 +4,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <AnchorPane prefHeight="408.0" prefWidth="530.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.devccv.popuprss.controller.ArchivedViewController" stylesheets="@../css/Archived.css">
-    <TableView fx:id="table" prefHeight="408.0" prefWidth="529.0" styleClass="table"/>
+    <TableView fx:id="table" prefHeight="408.0" prefWidth="529.0" styleClass="table"
+               AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+               AnchorPane.rightAnchor="0.0"/>
 </AnchorPane>

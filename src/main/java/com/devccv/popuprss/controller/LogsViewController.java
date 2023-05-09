@@ -30,7 +30,6 @@ import java.util.concurrent.locks.ReentrantLock;
 public final class LogsViewController implements Initializable {
     public static AtomicBoolean stopUpdateLogUI = new AtomicBoolean(true);
     public static AtomicBoolean pauseButtonSelected = new AtomicBoolean(false);
-    private static FlushLogThread FLUSH_LOG_THREAD;
     private static RSSMonitorThread RSS_MONITOR_THREAD;
     private static final Lock flushLogLock = new ReentrantLock();
     private static final Condition canFlushCondition = flushLogLock.newCondition();
@@ -68,17 +67,18 @@ public final class LogsViewController implements Initializable {
 
         //开启日志刷新线程
         stopUpdateLogUI.set(false);
-        FLUSH_LOG_THREAD = new FlushLogThread(logsTextArea, flushLogLock, canFlushCondition);
-        FLUSH_LOG_THREAD.start();
+        new FlushLogThread(logsTextArea, flushLogLock, canFlushCondition).start();
     }
 
     public static void newLog(String log) {
         //可供外部调用的，添加新日志方法
-        String newLog = "\n" + "[" + App.DATE_TIME_FORMATTER.format(LocalDateTime.now()) + "] " + log;
-        try {
-            logHolder.put(newLog);
-        } catch (InterruptedException ignored) {
-            return;
+        if (!log.isBlank()) {
+            String newLog = "\n" + "[" + App.DATE_TIME_FORMATTER.format(LocalDateTime.now()) + "] " + log;
+            try {
+                logHolder.put(newLog);
+            } catch (InterruptedException ignored) {
+                return;
+            }
         }
         if (!stopUpdateLogUI.get() && !pauseButtonSelected.get()) {
             if (flushLogLock.tryLock()) {
@@ -145,9 +145,5 @@ public final class LogsViewController implements Initializable {
         //暂停日志，清理内存
         pauseButtonSelected.set(pauseButton.isSelected());
         System.gc();
-    }
-
-    public static void tryShutdownFlushLogThread() {
-        if (FLUSH_LOG_THREAD != null) FLUSH_LOG_THREAD.interrupt();
     }
 }

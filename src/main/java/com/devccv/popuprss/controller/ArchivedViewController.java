@@ -37,10 +37,10 @@ public final class ArchivedViewController implements Initializable {
         columnTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
         columnUnits.setCellValueFactory(new PropertyValueFactory<>("units"));
         columnReward.setCellValueFactory(new PropertyValueFactory<>("reward"));
-        columnTime.setPrefWidth(110.0);
-        columnLevel.setPrefWidth(35.0);
+        columnTime.setPrefWidth(130.0);
+        columnLevel.setPrefWidth(55.0);
         columnLanguage.setPrefWidth(50.0);
-        columnTitle.setPrefWidth(220.0);
+        columnTitle.setPrefWidth(185.0);
         columnUnits.setPrefWidth(35.0);
         columnReward.setPrefWidth(55.0);
         table.getColumns().addAll(columnTime, columnLevel, columnLanguage, columnTitle, columnUnits, columnReward);
@@ -57,7 +57,8 @@ public final class ArchivedViewController implements Initializable {
         });
 
         //添加历史记录
-        table.getItems().addAll(CSV.readArchived());
+        tableItems = table.getItems();
+        tableItems.addAll(CSV.readArchived());
 
         //新记录添加监听器
         table.itemsProperty().addListener((observable, oldValue, newValue) -> {
@@ -65,8 +66,13 @@ public final class ArchivedViewController implements Initializable {
         });
 
         //构造供外部调用的添加记录方法
-        tableItems = table.getItems();
         newRecord = record -> {
+            //去重
+            int size = tableItems.size();
+            for (int i = 1; i < 5 && size >= i; i++) {
+                if (tableItems.get(size - i).getLink().equals(record.getLink()))
+                    return;
+            }
             tableItems.add(record);
             CSV.appendArchived(record);
         };

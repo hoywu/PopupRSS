@@ -6,6 +6,7 @@ import com.devccv.popuprss.util.ResourceBundleUtil;
 import io.github.palexdev.materialfx.controls.MFXIconWrapper;
 import io.github.palexdev.materialfx.controls.MFXRectangleToggleNode;
 import io.github.palexdev.materialfx.controls.MFXTooltip;
+import io.github.palexdev.materialfx.utils.SwingFXUtils;
 import io.github.palexdev.materialfx.utils.ToggleButtonsUtil;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -19,7 +20,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
@@ -27,15 +30,15 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.awt.*;
+import java.awt.event.MouseAdapter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -47,10 +50,25 @@ import static com.devccv.popuprss.util.ResourceBundleUtil.getStringValue;
 
 public final class MainController implements Initializable {
     @FXML
-    private HBox root;
+    public AnchorPane rootPane;
+    @FXML
+    private AnchorPane root;
     private final Stage stage;
+    private boolean isMaximized = false;
+    private double pervStageX;
+    private double pervStageY;
+    private double pervStageWidth;
+    private double pervStageHeight;
     private double mousePressedX;
     private double mousePressedY;
+//    private double mousePressedScreenX;
+//    private double mousePressedScreenY;
+//    private double mousePressedStageWidth;
+//    private double mousePressedStageHeight;
+    @FXML
+    public Button resizeBtnSW;
+    @FXML
+    public Button resizeBtnSE;
     public static Consumer<String> switchToErrorStatus; //需要使用Platform.runLater在UI线程调用
     public static Consumer<String> switchToEnableStatus; //需要使用Platform.runLater在UI线程调用
     public static Consumer<String> switchToDisableStatus; //需要使用Platform.runLater在UI线程调用
@@ -64,6 +82,8 @@ public final class MainController implements Initializable {
     private Rectangle disableBar;
     @FXML
     private Label statusText;
+    @FXML
+    public Circle minimizeIcon;
     @FXML
     private Circle closeIcon;
     @FXML
@@ -80,6 +100,7 @@ public final class MainController implements Initializable {
     private ObservableList<Node> navBarChildren;
     private ObservableList<Node> contentPaneChildren;
     private final ConcurrentHashMap<Integer, Node> subViews = new ConcurrentHashMap<>();
+    private TrayIcon trayIconObj;
 
     public MainController(Stage stage) {
         this.stage = stage;
@@ -91,14 +112,20 @@ public final class MainController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         //底层控件设置为透明
         root.setBackground(Background.EMPTY);
+        //设置四角拖动按钮透明
+        resizeBtnSW.setBackground(Background.EMPTY);
+        resizeBtnSE.setBackground(Background.EMPTY);
         //设置自定义字体
         titleLabel.setFont(ResourceBundleUtil.titleFont);
         subTitleLabel.setFont(ResourceBundleUtil.subTitleFont);
         statusText.setFont(ResourceBundleUtil.logFont);
         //按钮提示
         MFXTooltip closeIconTip = MFXTooltip.of(closeIcon, ResourceBundleUtil.getStringValue("close_icon_tooltip"));
+        MFXTooltip minimizeIconTip = MFXTooltip.of(minimizeIcon, ResourceBundleUtil.getStringValue("minimize_icon_tooltip"));
         closeIconTip.setShowDelay(new Duration(50.0));
         closeIconTip.install();
+        minimizeIconTip.setShowDelay(new Duration(50.0));
+        minimizeIconTip.install();
         //载入Logo
         logo.setImage(new Image(ResourcesLoader.loadStream("icon/logo.png")));
         //获取内容区子元素列表
@@ -129,6 +156,39 @@ public final class MainController implements Initializable {
             switchBar(BAR_STATUS.disable);
             statusText.setText(s);
         };
+        //窗口关闭事件
+        stage.setOnCloseRequest(event -> {
+            //关闭线程池，退出
+            App.FIXED_THREAD_POOL.shutdownNow();
+            SystemTray.getSystemTray().remove(trayIconObj);
+            Platform.exit();
+        });
+        //托盘图标
+        if (SystemTray.isSupported()) {
+            Platform.setImplicitExit(false);
+            SystemTray tray = SystemTray.getSystemTray();
+            //托盘图标
+            Image trayIcon = new Image(ResourcesLoader.loadStream("icon/logo.png"));
+            trayIconObj = new TrayIcon(SwingFXUtils.fromFXImage(trayIcon, null), getStringValue("tray_tooltip"));
+            trayIconObj.setImageAutoSize(true);
+            //托盘图标点击事件
+            trayIconObj.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(java.awt.event.MouseEvent e) {
+                    Platform.runLater(() -> {
+                        stage.show();
+                        stage.setIconified(false);
+                        stage.toFront();
+                    });
+                }
+            });
+            //添加托盘图标
+            try {
+                tray.add(trayIconObj);
+            } catch (AWTException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     private void addSideBarItem(int viewNum, String icon, String text, String fxml, boolean defaultSelected) {
@@ -145,10 +205,15 @@ public final class MainController implements Initializable {
             subViews.put(viewNum, fxmlLoader.getRoot());
         });
         EventHandler<ActionEvent> handler = event -> {
-            LogsViewController.stopUpdateLogUI.set(viewNum != 0);
+            if (viewNum == 0) {
+                LogsViewController.stopUpdateLogUI.set(false);
+                LogsViewController.newLog("");
+            } else {
+                LogsViewController.stopUpdateLogUI.set(true);
+            }
             while (!subViews.containsKey(viewNum)) {
                 try {
-                    Thread.sleep(100);
+                    Thread.sleep(50);
                 } catch (InterruptedException ignored) {
                 }
             }
@@ -174,9 +239,61 @@ public final class MainController implements Initializable {
     }
 
     @FXML
-    private void onMouseClickedRoot() {
+    private void onMouseClickedRoot(MouseEvent event) {
         //取消所有控件焦点
         root.requestFocus();
+
+        if (event.getClickCount() == 2 && event.getButton().name().equals(MouseButton.PRIMARY.name())) {
+            //最大化
+            Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
+            if (isMaximized) {
+                stage.setX(pervStageX);
+                stage.setY(pervStageY);
+                stage.setWidth(pervStageWidth);
+                stage.setHeight(pervStageHeight);
+                AnchorPane.setLeftAnchor(rootPane, 25.0);
+                AnchorPane.setRightAnchor(rootPane, 25.0);
+                AnchorPane.setTopAnchor(rootPane, 25.0);
+                AnchorPane.setBottomAnchor(rootPane, 25.0);
+            } else {
+                pervStageX = stage.getX();
+                pervStageY = stage.getY();
+                pervStageWidth = stage.getWidth();
+                pervStageHeight = stage.getHeight();
+                stage.setX(primaryScreenBounds.getMinX());
+                stage.setY(primaryScreenBounds.getMinY());
+                stage.setWidth(primaryScreenBounds.getWidth());
+                stage.setHeight(primaryScreenBounds.getHeight());
+                AnchorPane.setLeftAnchor(rootPane, 0.0);
+                AnchorPane.setRightAnchor(rootPane, 0.0);
+                AnchorPane.setTopAnchor(rootPane, 0.0);
+                AnchorPane.setBottomAnchor(rootPane, 0.0);
+            }
+            isMaximized = !isMaximized;
+        }
+    }
+
+    @FXML
+    private void onMouseDraggedSW(MouseEvent event) {
+        //拖拽改变窗口大小 左下角
+        //todo
+    }
+
+    @FXML
+    private void onMouseDraggedSE(MouseEvent event) {
+        //拖拽改变窗口大小 右下角
+        double x = event.getScreenX();
+        double y = event.getScreenY();
+        if (isMaximized) {
+            x -= 25.0;
+            y -= 25.0;
+        }
+        double width = x - stage.getX() + 25.0;
+        double height = y - stage.getY() + 25.0;
+        if (width < 800) width = 800;
+        if (height < 500) height = 500;
+        stage.setWidth(width);
+        stage.setHeight(height);
     }
 
     @FXML
@@ -184,6 +301,11 @@ public final class MainController implements Initializable {
         //记录鼠标点击位置
         mousePressedX = event.getSceneX();
         mousePressedY = event.getSceneY();
+//        mousePressedScreenX = event.getScreenX();
+//        mousePressedScreenY = event.getScreenY();
+//        //记录舞台大小
+//        mousePressedStageWidth = stage.getWidth();
+//        mousePressedStageHeight = stage.getHeight();
         //停止日志输出
         LogsViewController.stopUpdateLogUI.set(true);
     }
@@ -192,6 +314,7 @@ public final class MainController implements Initializable {
     private void onMouseReleasedRoot() {
         //开启日志输出
         LogsViewController.stopUpdateLogUI.set(false);
+        LogsViewController.newLog("");
     }
 
     @FXML
@@ -202,11 +325,19 @@ public final class MainController implements Initializable {
     }
 
     @FXML
+    private void onMouseClickedMinimizeIcon(MouseEvent event) {
+        //最小化窗口到托盘图标
+        if (event.getButton() == MouseButton.PRIMARY) {
+            stage.hide();
+        }
+    }
+
+    @FXML
     private void onMouseClickedCloseIcon(MouseEvent event) {
         //关闭线程池，退出
         if (event.getButton() == MouseButton.PRIMARY) {
             App.FIXED_THREAD_POOL.shutdownNow();
-            LogsViewController.tryShutdownFlushLogThread();
+            SystemTray.getSystemTray().remove(trayIconObj);
             Platform.exit();
         }
     }

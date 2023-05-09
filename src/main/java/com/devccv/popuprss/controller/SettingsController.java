@@ -1,8 +1,7 @@
 package com.devccv.popuprss.controller;
 
+import com.devccv.popuprss.App;
 import com.devccv.popuprss.ResourcesLoader;
-import com.devccv.popuprss.subscribe.MicrosoftStore;
-import com.devccv.popuprss.subscribe.Subscribe;
 import com.devccv.popuprss.util.ConfigManager;
 import com.devccv.popuprss.util.Encrypt;
 import com.devccv.popuprss.util.ResourceBundleUtil;
@@ -26,11 +25,10 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public final class SettingsController implements Initializable {
-    private static final Subscribe subscribe = new MicrosoftStore();
     @FXML
-    private MFXTextField subscribeStatusField;
+    private MFXTextField statusField;
     @FXML
-    private MFXTextField subscribeValidity;
+    private MFXTextField version;
     @FXML
     private MFXComboBox<String> languageCombo;
     @FXML
@@ -141,17 +139,17 @@ public final class SettingsController implements Initializable {
         autoPopupCheckbox.setSelected(ConfigManager.CONFIG.isAutoPopup());
         autoPopupCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> saveButton.setDisable(false));
 
-        //检查订阅
-        if (subscribe.isSubscribed()) {
-            subscribeStatusField.setText(ResourceBundleUtil.getStringValue("settings_subscribe_status_valid"));
-            subscribeStatusField.setStyle("-fx-text-fill: #005F40");
-            subscribeValidity.setText(subscribe.getSubscribeValidity());
-            subscribeValidity.setStyle("-fx-text-fill: #005F40");
+        //显示状态
+        if (App.status.isValid()) {
+            statusField.setText(ResourceBundleUtil.getStringValue("settings_status_valid"));
+            statusField.setStyle("-fx-text-fill: #005F40");
+            version.setText(App.status.getVersion());
+            version.setStyle("-fx-text-fill: #005F40");
         } else {
-            subscribeStatusField.setText(ResourceBundleUtil.getStringValue("settings_subscribe_status_invalid"));
-            subscribeStatusField.setStyle("-fx-text-fill: #ff0000");
-            subscribeValidity.setText(ResourceBundleUtil.getStringValue("settings_null_validity"));
-            subscribeValidity.setStyle("-fx-text-fill: #ff0000");
+            statusField.setText(ResourceBundleUtil.getStringValue("settings_status_invalid"));
+            statusField.setStyle("-fx-text-fill: #ff0000");
+            version.setText(ResourceBundleUtil.getStringValue("settings_null_validity"));
+            version.setStyle("-fx-text-fill: #ff0000");
         }
     }
 
@@ -159,10 +157,10 @@ public final class SettingsController implements Initializable {
         try {
             int delay = Integer.parseInt(checkDelayField.getText());
 
-            if (!subscribe.isSubscribed()) {
-                //未订阅用户
-                if (delay < 180) {
-                    delayErrorLabel.setText(ResourceBundleUtil.getStringValue("settings_free_user_delay_cant_less_than"));
+            if (!App.status.isValid()) {
+                //无效
+                if (delay < 120) {
+                    delayErrorLabel.setText(ResourceBundleUtil.getStringValue("settings_status_invalid"));
                     delayErrorLabel.setVisible(true);
                     return false;
                 } else {

@@ -9,7 +9,8 @@
 <AnchorPane prefHeight="408.0" prefWidth="530.0" stylesheets="@../css/Settings.css"
             xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.devccv.popuprss.controller.SettingsController">
-    <VBox prefWidth="529.0" spacing="10">
+    <VBox prefWidth="529.0" spacing="10" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0"
+          AnchorPane.rightAnchor="0.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
         <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
         </padding>
@@ -18,10 +19,10 @@
             <padding>
                 <Insets bottom="5.0"/>
             </padding>
-            <MFXTextField allowEdit="false" caretVisible="false" floatingText="%settings_subscribe_status"
-                          selectable="false" fx:id="subscribeStatusField" prefWidth="108.0" floatMode="BORDER"/>
-            <MFXTextField allowEdit="false" caretVisible="false" floatingText="%settings_validity_period"
-                          selectable="false" fx:id="subscribeValidity" prefWidth="108.0" floatMode="BORDER"/>
+            <MFXTextField allowEdit="false" caretVisible="false" floatingText="%settings_status"
+                          selectable="false" fx:id="statusField" prefWidth="108.0" floatMode="BORDER"/>
+            <MFXTextField allowEdit="false" caretVisible="false" floatingText="%settings_validity_version"
+                          selectable="false" fx:id="version" prefWidth="108.0" floatMode="BORDER"/>
             <HBox HBox.hgrow="ALWAYS"/>
             <MFXComboBox fx:id="languageCombo" floatMode="BORDER" floatingText="%settings_language" prefHeight="35.0"
                          prefWidth="120.0" styleClass="language-combo"/>
@@ -36,12 +37,12 @@
             </Label>
         </HBox>
 
-        <HBox>
+        <HBox alignment="CENTER" HBox.hgrow="ALWAYS">
             <padding>
                 <Insets top="5.0"/>
             </padding>
             <MFXPasswordField fx:id="rssField" floatMode="BORDER" floatingText="%settings_rss_link" prefHeight="20.0"
-                              prefWidth="510.0"/>
+                              prefWidth="510.0" maxHeight="Infinity" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
         </HBox>
 
         <HBox alignment="CENTER_RIGHT" spacing="10">

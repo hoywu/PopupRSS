@@ -1,22 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.*?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.*?>
-<?import javafx.scene.text.Font?>
-<HBox fx:id="root" alignment="CENTER" prefHeight="500.0" prefWidth="800.0" stylesheets="@../css/main-view.css"
-      xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.devccv.popuprss.controller.MainController">
-    <AnchorPane maxHeight="450.0" maxWidth="750.0" onMouseDragged="#onMouseDraggedRoot"
-                onMousePressed="#onMousePressedRoot" onMouseReleased="#onMouseReleasedRoot"
-                onMouseClicked="#onMouseClickedRoot" prefHeight="450.0" prefWidth="750.0" styleClass="root-pane">
-        <VBox prefHeight="450.0" prefWidth="550.0" styleClass="right-pane" AnchorPane.rightAnchor="0.0">
+<?import javafx.scene.text.*?>
+
+<AnchorPane fx:id="root" prefHeight="500.0" prefWidth="800.0" stylesheets="@../css/main-view.css"
+            xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.devccv.popuprss.controller.MainController">
+    <AnchorPane fx:id="rootPane" onMouseClicked="#onMouseClickedRoot" onMouseDragged="#onMouseDraggedRoot"
+                onMousePressed="#onMousePressedRoot" onMouseReleased="#onMouseReleasedRoot" styleClass="root-pane"
+                AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0"
+                AnchorPane.topAnchor="25.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+        <VBox prefHeight="450.0" prefWidth="550.0" styleClass="right-pane" AnchorPane.bottomAnchor="0.0"
+              AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <padding>
                 <Insets bottom="10.0" left="10.0" right="10.0" top="8.0"/>
             </padding>
-            <HBox prefWidth="550.0">
+            <HBox prefWidth="550.0" HBox.hgrow="ALWAYS">
                 <StackPane>
                     <HBox alignment="CENTER_LEFT" prefWidth="450.0" spacing="10.0">
                         <Rectangle fill="transparent" height="16" width="100"/>
@@ -28,12 +32,14 @@
                         <Rectangle fx:id="disableBar" fill="#F5A623" height="16" width="100"/>
                     </HBox>
                 </StackPane>
-                <HBox alignment="CENTER_RIGHT" prefWidth="100.0">
+                <HBox alignment="CENTER_RIGHT" prefWidth="100.0" spacing="5.0" HBox.hgrow="ALWAYS">
+                    <Circle fx:id="minimizeIcon" fill="#FBB43A" onMouseClicked="#onMouseClickedMinimizeIcon" radius="8"
+                            styleClass="close-icon"/>
                     <Circle fx:id="closeIcon" fill="RED" onMouseClicked="#onMouseClickedCloseIcon" radius="8"
                             styleClass="close-icon"/>
                 </HBox>
             </HBox>
-            <StackPane fx:id="contentPane" prefHeight="450.0" prefWidth="550.0">
+            <StackPane fx:id="contentPane" prefHeight="408.0" prefWidth="530.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
                 <VBox.margin>
                     <Insets top="8.0"/>
                 </VBox.margin>
@@ -41,7 +47,7 @@
         </VBox>
 
         <VBox alignment="TOP_CENTER" prefHeight="450.0" prefWidth="200.0" styleClass="left-pane"
-              AnchorPane.leftAnchor="0.0">
+              AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
             <padding>
                 <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
             </padding>
@@ -68,5 +74,22 @@
                 </VBox.margin>
             </VBox>
         </VBox>
+
+        <Button fx:id="resizeBtnSW" maxHeight="10.0" maxWidth="10.0" minHeight="10.0" minWidth="10.0"
+                onMouseDragged="#onMouseDraggedSW" onMousePressed="#onMousePressedRoot"
+                onMouseReleased="#onMouseReleasedRoot" prefHeight="10.0" prefWidth="10.0" AnchorPane.bottomAnchor="0.0"
+                AnchorPane.leftAnchor="0.0">
+            <cursor>
+                <Cursor fx:constant="SW_RESIZE"/>
+            </cursor>
+        </Button>
+        <Button fx:id="resizeBtnSE" maxHeight="10.0" maxWidth="10.0" minHeight="10.0" minWidth="10.0"
+                onMouseDragged="#onMouseDraggedSE" onMousePressed="#onMousePressedRoot"
+                onMouseReleased="#onMouseReleasedRoot" prefHeight="10.0" prefWidth="10.0" AnchorPane.bottomAnchor="0.0"
+                AnchorPane.rightAnchor="0.0">
+            <cursor>
+                <Cursor fx:constant="SE_RESIZE"/>
+            </cursor>
+        </Button>
     </AnchorPane>
-</HBox>
+</AnchorPane>

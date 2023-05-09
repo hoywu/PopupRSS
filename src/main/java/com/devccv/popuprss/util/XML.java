@@ -28,7 +28,7 @@ public final class XML {
             String[] titleSplit = fullTitle.split("\\|");
             level = titleSplit[0].trim().replace("(", "").replace(")", "");
             language = titleSplit[titleSplit.length - 1].trim();
-            title = titleSplit[1].trim();
+            title = titleSplit[1].trim().replace(',', ';').replace('\n', '_');
             description = title; //todo:临时
             units = titleSplit[2].replace("chars", "").trim();
             reward = titleSplit[3].replace("Reward: US", "").trim();

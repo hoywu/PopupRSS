@@ -1,5 +1,6 @@
 package com.devccv.popuprss.util;
 
+import com.devccv.popuprss.App;
 import com.devccv.popuprss.ResourcesLoader;
 import com.devccv.popuprss.bean.Config;
 import com.devccv.popuprss.controller.LogsViewController;
@@ -20,12 +21,18 @@ import java.util.Properties;
 
 public final class ConfigManager {
     public static final Config CONFIG;
-    private static final Properties SETTINGS = new Properties();
+    private static Properties SETTINGS = new Properties();
 
     static {
         //从资源读取默认配置
+        Properties RESET_TO_DEFAULT = new Properties();
         try (Reader in = new InputStreamReader(ResourcesLoader.loadStream("default-settings.properties"), StandardCharsets.UTF_8)) {
             SETTINGS.load(in);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        try (Reader in = new InputStreamReader(ResourcesLoader.loadStream("default-settings.properties"), StandardCharsets.UTF_8)) {
+            RESET_TO_DEFAULT.load(in);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -51,6 +58,22 @@ public final class ConfigManager {
             }
             saveSettingsProperties(SETTINGS);
             Platform.runLater(() -> MainController.switchToErrorStatus.accept(ResourceBundleUtil.getStringValue("status_first_start")));
+        }
+
+        //合法性检查
+        try {
+            if (Integer.parseUnsignedInt(SETTINGS.getProperty("config.checkDelay")) < 60) {
+                SETTINGS.setProperty("config.checkDelay", "60");
+            }
+            //订阅检查
+            if (!App.status.isValid()) {
+                if (Integer.parseUnsignedInt(SETTINGS.getProperty("config.checkDelay")) < 120) {
+                    SETTINGS.setProperty("config.checkDelay", "120");
+                }
+            }
+        } catch (NumberFormatException e) {
+            SETTINGS = RESET_TO_DEFAULT;
+            Platform.runLater(() -> MainController.switchToErrorStatus.accept(ResourceBundleUtil.getStringValue("status_config_error")));
         }
 
         //从配置生成Config对象

@@ -1,6 +1,8 @@
 package com.devccv.popuprss;
 
 import com.devccv.popuprss.controller.MainController;
+import com.devccv.popuprss.status.Github;
+import com.devccv.popuprss.status.Status;
 import com.devccv.popuprss.util.ConfigManager;
 import com.devccv.popuprss.util.ResourceBundleUtil;
 import javafx.application.Application;
@@ -12,13 +14,13 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public final class App extends Application {
+    public static final Status status = new Github();
     public static final ExecutorService FIXED_THREAD_POOL = Executors.newFixedThreadPool(5);
     public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
