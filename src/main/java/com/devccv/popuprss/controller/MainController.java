@@ -50,9 +50,9 @@ import static com.devccv.popuprss.util.ResourceBundleUtil.getStringValue;
 
 public final class MainController implements Initializable {
     @FXML
-    public AnchorPane rootPane;
-    @FXML
     private AnchorPane root;
+    @FXML
+    public AnchorPane rootPane;
     private final Stage stage;
     private boolean isMaximized = false;
     private double pervStageX;
@@ -194,28 +194,21 @@ public final class MainController implements Initializable {
     private void addSideBarItem(int viewNum, String icon, String text, String fxml, boolean defaultSelected) {
         //添加选择卡到侧边栏
         ToggleButton toggle = createToggle(icon, text);
-        //异步载入子视图
-        App.FIXED_THREAD_POOL.submit(() -> {
-            FXMLLoader fxmlLoader = new FXMLLoader(loadURL(fxml), ResourceBundleUtil.resource);
-            try {
-                fxmlLoader.load();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            subViews.put(viewNum, fxmlLoader.getRoot());
-        });
+        //载入子视图
+        FXMLLoader fxmlLoader = new FXMLLoader(loadURL(fxml), ResourceBundleUtil.resource);
+        try {
+            fxmlLoader.load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        subViews.put(viewNum, fxmlLoader.getRoot());
+        //添加选择卡点击事件
         EventHandler<ActionEvent> handler = event -> {
             if (viewNum == 0) {
                 LogsViewController.stopUpdateLogUI.set(false);
                 LogsViewController.newLog("");
             } else {
                 LogsViewController.stopUpdateLogUI.set(true);
-            }
-            while (!subViews.containsKey(viewNum)) {
-                try {
-                    Thread.sleep(50);
-                } catch (InterruptedException ignored) {
-                }
             }
             contentPaneChildren.setAll(subViews.get(viewNum));
         };
