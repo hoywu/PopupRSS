@@ -29,12 +29,23 @@ It can run in the background and directly popup in the browser when a new job is
 ## Known issues
 
 - Because of the UI animation, you may experience performance issues if GPU acceleration is not available.
+  This issue should not affect the functionality of the RSS monitor.
     - Minimizing the application to system tray will minimize resource usage, and you can
       enable `Minimize to tray on startup` in `Settings`.
 
 ## License
 
 This project is licensed under the MIT License.
+
+## Donate
+
+If you like this project, please consider donating to support the development.
+
+**Or give me a free star ⭐️ to encourage me!**
+
+[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg?style=for-the-badge)](https://paypal.me/szwhy)
+
+![Wechat](Assets/Wechat.png)
 
 ## Credits
 
