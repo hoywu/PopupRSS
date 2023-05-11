@@ -54,6 +54,8 @@ public final class SettingsController implements Initializable {
     @FXML
     private MFXCheckbox autoPopupCheckbox;
     @FXML
+    public MFXCheckbox autoMinimizeCheckbox;
+    @FXML
     private MFXRectangleToggleNode saveButton;
 
     @Override
@@ -138,6 +140,8 @@ public final class SettingsController implements Initializable {
         autoStartCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> saveButton.setDisable(false));
         autoPopupCheckbox.setSelected(ConfigManager.CONFIG.isAutoPopup());
         autoPopupCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> saveButton.setDisable(false));
+        autoMinimizeCheckbox.setSelected(ConfigManager.CONFIG.isAutoMinimize());
+        autoMinimizeCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> saveButton.setDisable(false));
 
         //显示状态
         if (App.status.isValid()) {
@@ -254,6 +258,7 @@ public final class SettingsController implements Initializable {
         //复选框
         ConfigManager.CONFIG.setCheckOnStart(autoStartCheckbox.isSelected());
         ConfigManager.CONFIG.setAutoPopup(autoPopupCheckbox.isSelected());
+        ConfigManager.CONFIG.setAutoMinimize(autoMinimizeCheckbox.isSelected());
 
         ConfigManager.saveConfig();
         saveButton.requestFocus();

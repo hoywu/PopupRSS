@@ -79,6 +79,7 @@
         <HBox spacing="10">
             <MFXCheckbox fx:id="autoStartCheckbox" text="%settings_autoStart"/>
             <MFXCheckbox fx:id="autoPopupCheckbox" selected="true" text="%settings_autoPopup"/>
+            <MFXCheckbox fx:id="autoMinimizeCheckbox" text="%settings_autoMinimize"/>
         </HBox>
 
         <HBox alignment="CENTER_RIGHT">

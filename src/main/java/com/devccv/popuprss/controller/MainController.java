@@ -2,6 +2,7 @@ package com.devccv.popuprss.controller;
 
 import com.devccv.popuprss.App;
 import com.devccv.popuprss.ResourcesLoader;
+import com.devccv.popuprss.util.ConfigManager;
 import com.devccv.popuprss.util.ResourceBundleUtil;
 import io.github.palexdev.materialfx.controls.MFXIconWrapper;
 import io.github.palexdev.materialfx.controls.MFXRectangleToggleNode;
@@ -101,6 +102,7 @@ public final class MainController implements Initializable {
     private ObservableList<Node> contentPaneChildren;
     private final ConcurrentHashMap<Integer, Node> subViews = new ConcurrentHashMap<>();
     private TrayIcon trayIconObj;
+    private static boolean minimizeNotifyFlag = true;
 
     public MainController(Stage stage) {
         this.stage = stage;
@@ -188,6 +190,11 @@ public final class MainController implements Initializable {
             } catch (AWTException e) {
                 throw new RuntimeException(e);
             }
+        }
+        //自动最小化
+        if (ConfigManager.CONFIG.isAutoMinimize()) {
+            minimizeNotifyFlag = false;
+            Platform.runLater(stage::hide);
         }
     }
 
@@ -321,6 +328,10 @@ public final class MainController implements Initializable {
     private void onMouseClickedMinimizeIcon(MouseEvent event) {
         //最小化窗口到托盘图标
         if (event.getButton() == MouseButton.PRIMARY) {
+            if (minimizeNotifyFlag) {
+                trayIconObj.displayMessage(ResourceBundleUtil.getStringValue("tray_message_title"), ResourceBundleUtil.getStringValue("tray_message_minimize"), TrayIcon.MessageType.INFO);
+                minimizeNotifyFlag = false;
+            }
             stage.hide();
         }
     }

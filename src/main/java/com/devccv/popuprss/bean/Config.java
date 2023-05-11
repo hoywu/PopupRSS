@@ -9,6 +9,7 @@ public final class Config {
     private String proxyURL;
     private boolean checkOnStart;
     private boolean autoPopup;
+    private boolean autoMinimize;
 
     public String getVersion() {
         return version;
@@ -72,5 +73,13 @@ public final class Config {
 
     public void setAutoPopup(boolean autoPopup) {
         this.autoPopup = autoPopup;
+    }
+
+    public boolean isAutoMinimize() {
+        return autoMinimize;
+    }
+
+    public void setAutoMinimize(boolean autoMinimize) {
+        this.autoMinimize = autoMinimize;
     }
 }
