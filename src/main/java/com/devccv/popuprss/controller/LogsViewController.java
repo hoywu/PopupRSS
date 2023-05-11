@@ -17,6 +17,7 @@ import javafx.scene.image.ImageView;
 
 import java.net.InetSocketAddress;
 import java.net.Proxy;
+import java.net.URI;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ResourceBundle;
@@ -68,6 +69,14 @@ public final class LogsViewController implements Initializable {
         //开启日志刷新线程
         stopUpdateLogUI.set(false);
         new FlushLogThread(logsTextArea, flushLogLock, canFlushCondition).start();
+
+        //自动开始
+        if (ConfigManager.CONFIG.isCheckOnStart()) {
+            Platform.runLater(() -> {
+                startButton.setSelected(true);
+                onMouseClickedStartBtn();
+            });
+        }
     }
 
     public static void newLog(String log) {
@@ -116,7 +125,7 @@ public final class LogsViewController implements Initializable {
 
             URL url;
             try {
-                url = new URL(Encrypt.decryptWithUserName(ConfigManager.CONFIG.getRssLink()));
+                url = new URI(Encrypt.decryptWithUserName(ConfigManager.CONFIG.getRssLink())).toURL();
             } catch (Exception e) {
                 Platform.runLater(() -> MainController.switchToErrorStatus.accept(ResourceBundleUtil.getStringValue("status_rss_link_error")));
                 startButton.setSelected(false);
