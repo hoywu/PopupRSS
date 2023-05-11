@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import io.github.palexdev.materialfx.controls.*?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.image.ImageView?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.*?>
+
 <AnchorPane prefHeight="408.0" prefWidth="530.0" stylesheets="@../css/Settings.css"
             xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.devccv.popuprss.controller.SettingsController">
-    <VBox prefWidth="529.0" spacing="10" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0"
-          AnchorPane.rightAnchor="0.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+    <VBox prefWidth="529.0" spacing="10" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+          AnchorPane.topAnchor="0.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
         <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
         </padding>
@@ -19,10 +20,10 @@
             <padding>
                 <Insets bottom="5.0"/>
             </padding>
-            <MFXTextField allowEdit="false" caretVisible="false" floatingText="%settings_status"
-                          selectable="false" fx:id="statusField" prefWidth="108.0" floatMode="BORDER"/>
-            <MFXTextField allowEdit="false" caretVisible="false" floatingText="%settings_validity_version"
-                          selectable="false" fx:id="version" prefWidth="108.0" floatMode="BORDER"/>
+            <MFXTextField fx:id="statusField" allowEdit="false" caretVisible="false" floatMode="BORDER"
+                          floatingText="%settings_status" prefWidth="108.0" selectable="false"/>
+            <MFXTextField fx:id="version" allowEdit="false" caretVisible="false" floatMode="BORDER"
+                          floatingText="%settings_validity_version" prefWidth="108.0" selectable="false"/>
             <HBox HBox.hgrow="ALWAYS"/>
             <MFXComboBox fx:id="languageCombo" floatMode="BORDER" floatingText="%settings_language" prefHeight="35.0"
                          prefWidth="120.0" styleClass="language-combo"/>
@@ -41,15 +42,15 @@
             <padding>
                 <Insets top="5.0"/>
             </padding>
-            <MFXPasswordField fx:id="rssField" floatMode="BORDER" floatingText="%settings_rss_link" prefHeight="20.0"
-                              prefWidth="510.0" maxHeight="Infinity" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+            <MFXPasswordField fx:id="rssField" floatMode="BORDER" floatingText="%settings_rss_link" maxHeight="Infinity"
+                              maxWidth="Infinity" prefHeight="20.0" prefWidth="510.0" HBox.hgrow="ALWAYS"/>
         </HBox>
 
         <HBox alignment="CENTER_RIGHT" spacing="10">
             <padding>
                 <Insets top="16.0"/>
             </padding>
-            <MFXRadioButton fx:id="proxyNo" text="%settings_no_proxy" selected="true"/>
+            <MFXRadioButton fx:id="proxyNo" selected="true" text="%settings_no_proxy"/>
             <MFXRadioButton fx:id="proxyHTTP" text="HTTP"/>
             <MFXRadioButton fx:id="proxySOCKS" text="SOCKS"/>
         </HBox>
@@ -65,9 +66,9 @@
                 </Label>
             </VBox>
             <HBox HBox.hgrow="ALWAYS"/>
-            <VBox spacing="2" alignment="CENTER_RIGHT">
-                <MFXTextField floatMode="BORDER" floatingText="Proxy URL" prefHeight="35.0" prefWidth="190.0"
-                              fx:id="proxyURLField"/>
+            <VBox alignment="CENTER_RIGHT" spacing="2">
+                <MFXTextField fx:id="proxyURLField" floatMode="BORDER" floatingText="Proxy URL" prefHeight="35.0"
+                              prefWidth="190.0"/>
                 <Label fx:id="proxyErrorLabel" textFill="#ef6e6b" visible="false" wrapText="true">
                     <font>
                         <Font name="Sarasa Mono Slab SC" size="11.0"/>
@@ -76,11 +77,12 @@
             </VBox>
         </HBox>
 
-        <HBox spacing="10">
+        <FlowPane hgap="10.0" vgap="10.0">
             <MFXCheckbox fx:id="autoStartCheckbox" text="%settings_autoStart"/>
-            <MFXCheckbox fx:id="autoPopupCheckbox" selected="true" text="%settings_autoPopup"/>
             <MFXCheckbox fx:id="autoMinimizeCheckbox" text="%settings_autoMinimize"/>
-        </HBox>
+            <MFXCheckbox fx:id="autoPopupCheckbox" selected="true" text="%settings_autoPopup"/>
+            <MFXCheckbox fx:id="pushNotifyCheckbox" selected="true" text="%settings_pushNotify"/>
+        </FlowPane>
 
         <HBox alignment="CENTER_RIGHT">
             <MFXRectangleToggleNode fx:id="saveButton" disable="true" onMouseClicked="#onMouseClickedSaveBtn"

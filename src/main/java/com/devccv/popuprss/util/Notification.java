@@ -16,4 +16,12 @@ public final class Notification {
         }
         return false;
     }
+
+    public static boolean PushSystemNotify(String title, String text) throws IOException {
+        if (SystemTray.isSupported()) {
+            SystemTray.getSystemTray().getTrayIcons()[0].displayMessage(title, text, TrayIcon.MessageType.INFO);
+            return true;
+        }
+        return false;
+    }
 }

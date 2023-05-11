@@ -10,6 +10,7 @@ public final class Config {
     private boolean checkOnStart;
     private boolean autoPopup;
     private boolean autoMinimize;
+    private boolean pushSystemNotify;
 
     public String getVersion() {
         return version;
@@ -81,5 +82,13 @@ public final class Config {
 
     public void setAutoMinimize(boolean autoMinimize) {
         this.autoMinimize = autoMinimize;
+    }
+
+    public boolean isPushSystemNotify() {
+        return pushSystemNotify;
+    }
+
+    public void setPushSystemNotify(boolean pushSystemNotify) {
+        this.pushSystemNotify = pushSystemNotify;
     }
 }
