@@ -45,7 +45,7 @@ public class SimpleHttps {
         httpsURLConnection.setConnectTimeout(5000);
         httpsURLConnection.setReadTimeout(5000);
         httpsURLConnection.setRequestProperty("Connection", "Keep-Alive");
-        httpsURLConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36 Edg/111.0.1661.44");
+        httpsURLConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) PopupRSS/1.0");
         return httpsURLConnection;
     }
 }

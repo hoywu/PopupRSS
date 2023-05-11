@@ -1,6 +1,9 @@
 package com.devccv.popuprss;
 
+import com.devccv.popuprss.controller.LogsViewController;
 import com.devccv.popuprss.controller.MainController;
+import com.devccv.popuprss.network.RequestResult;
+import com.devccv.popuprss.network.SimpleHttps;
 import com.devccv.popuprss.status.Github;
 import com.devccv.popuprss.status.Status;
 import com.devccv.popuprss.util.ConfigManager;
@@ -14,6 +17,10 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.Proxy;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
@@ -49,5 +56,21 @@ public final class App extends Application {
         Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
         primaryStage.setX((screenBounds.getWidth() - primaryStage.getWidth()) / 2);
         primaryStage.setY((screenBounds.getHeight() - primaryStage.getHeight()) / 2);
+
+        //检查更新
+        FIXED_THREAD_POOL.execute(() -> {
+            try {
+                RequestResult result = SimpleHttps.GET(new URI("https://app.devccv.com/popuprss/").toURL(), Proxy.NO_PROXY);
+                if (result.isSucceed()) {
+                    if (!result.getResponse().trim().equals(ResourceBundleUtil.getStringValue("current_version"))) {
+                        LogsViewController.newLog("New version available!\nCurrent version: "
+                                                  + ResourceBundleUtil.getStringValue("current_version")
+                                                  + " New version: " + result.getResponse()
+                                                  + "\nDownload: https://github.com/hoywu/PopupRSS");
+                    }
+                }
+            } catch (MalformedURLException | URISyntaxException ignored) {
+            }
+        });
     }
 }
