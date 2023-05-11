@@ -11,6 +11,8 @@ import io.github.palexdev.materialfx.controls.MFXRectangleToggleNode;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -51,6 +53,16 @@ public final class LogsViewController implements Initializable {
         startButton.setFont(ResourceBundleUtil.logFont);
         pauseButton.setFont(ResourceBundleUtil.logFont);
         clearButton.setFont(ResourceBundleUtil.logFont);
+
+        //修复模糊
+        Platform.runLater(() -> {
+            logsTextArea.setCache(false);
+            ScrollPane sp = (ScrollPane) logsTextArea.getChildrenUnmodifiable().get(0);
+            sp.setCache(false);
+            for (Node n : sp.getChildrenUnmodifiable()) {
+                n.setCache(false);
+            }
+        });
 
         //设置按钮图标
         ImageView icon = new ImageView(new Image(ResourcesLoader.loadStream("icon/pause.png")));
