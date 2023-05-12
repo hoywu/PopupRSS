@@ -3,6 +3,7 @@ module com.devccv.popuprss {
     requires javafx.fxml;
     requires MaterialFX;
     requires jdk.accessibility;
+    requires jdk.crypto.ec;
 
     opens com.devccv.popuprss to javafx.fxml, javafx.graphics;
     opens com.devccv.popuprss.bean to javafx.base;
