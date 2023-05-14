@@ -132,16 +132,20 @@ public final class ConfigManager {
         return properties;
     }
 
-    private static void saveSettingsProperties(Properties properties) {
+    private static boolean saveSettingsProperties(Properties properties) {
         //将设置Properties存到文件
         try (OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream("settings.properties"), StandardCharsets.UTF_8)) {
             properties.store(out, "PopupRSS - User Settings");
+            return true;
         } catch (IOException e) {
             LogsViewController.newLog(ResourceBundleUtil.getStringValue("log_write_config_error"));
+            return false;
         }
     }
 
     public static void saveConfig() {
-        saveSettingsProperties(toPropertiesObj(CONFIG, "config"));
+        if (saveSettingsProperties(toPropertiesObj(CONFIG, "config"))) {
+            LogsViewController.newLog(ResourceBundleUtil.getStringValue("log_settings_changed"));
+        }
     }
 }

@@ -65,7 +65,7 @@ public final class App extends Application {
                     if (!result.getResponse().trim().equals(ResourceBundleUtil.getStringValue("current_version"))) {
                         LogsViewController.newLog("New version available!\nCurrent version: "
                                                   + ResourceBundleUtil.getStringValue("current_version")
-                                                  + " New version: " + result.getResponse()
+                                                  + " New version: " + result.getResponse().trim()
                                                   + "\nDownload: https://github.com/hoywu/PopupRSS");
                     }
                 }
