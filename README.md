@@ -32,16 +32,17 @@ It can run in the background and directly popup in the browser when a new job is
   This issue should not affect the functionality of the RSS monitor.
     - Minimizing the application to system tray will minimize resource usage, and you can
       enable `Minimize to tray on startup` in `Settings`.
+    - Or use the CLI version `PopupRSS_CLI.exe` instead of the GUI version.
 
 ## License
 
 This project is licensed under the MIT License.
 
-## Donate
+## Support
 
-If you like this project, please consider donating to support the development.
+If you like this project, you can buy me a coffee ☕️.
 
-**Or give me a free star ⭐️ to encourage me!**
+**Or give me a free star ⭐️ to encourage me to do more!**
 
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg?style=for-the-badge)](https://paypal.me/szwhy)
 
