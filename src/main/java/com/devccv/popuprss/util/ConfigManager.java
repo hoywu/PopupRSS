@@ -5,7 +5,6 @@ import com.devccv.popuprss.ResourcesLoader;
 import com.devccv.popuprss.bean.Config;
 import com.devccv.popuprss.controller.LogsViewController;
 import com.devccv.popuprss.controller.MainController;
-import javafx.application.Platform;
 
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
@@ -45,9 +44,9 @@ public final class ConfigManager {
                 LogsViewController.newLog(ResourceBundleUtil.getStringValue("log_read_config_error"));
             }
             if (SETTINGS.getProperty("config.rssLink").isBlank()) {
-                Platform.runLater(() -> MainController.switchToErrorStatus.accept(ResourceBundleUtil.getStringValue("status_no_rss_link")));
+                App.runLater(() -> MainController.switchToErrorStatus.accept(ResourceBundleUtil.getStringValue("status_no_rss_link")));
             } else {
-                Platform.runLater(() -> MainController.switchToDisableStatus.accept(ResourceBundleUtil.getStringValue("status_ready")));
+                App.runLater(() -> MainController.switchToDisableStatus.accept(ResourceBundleUtil.getStringValue("status_ready")));
             }
         } else {
             //没有用户配置则生成默认配置
@@ -57,7 +56,7 @@ public final class ConfigManager {
                 SETTINGS.setProperty("config.language", "Chinese");
             }
             saveSettingsProperties(SETTINGS);
-            Platform.runLater(() -> MainController.switchToErrorStatus.accept(ResourceBundleUtil.getStringValue("status_first_start")));
+            App.runLater(() -> MainController.switchToErrorStatus.accept(ResourceBundleUtil.getStringValue("status_first_start")));
         }
 
         //合法性检查
@@ -73,7 +72,7 @@ public final class ConfigManager {
             }
         } catch (NumberFormatException e) {
             SETTINGS = RESET_TO_DEFAULT;
-            Platform.runLater(() -> MainController.switchToErrorStatus.accept(ResourceBundleUtil.getStringValue("status_config_error")));
+            App.runLater(() -> MainController.switchToErrorStatus.accept(ResourceBundleUtil.getStringValue("status_config_error")));
         }
 
         //从配置生成Config对象
@@ -107,7 +106,7 @@ public final class ConfigManager {
             }
         } catch (IntrospectionException | IllegalAccessException | InvocationTargetException e) {
             //下面的语句是不必要的，格式错误也不会导致此处异常
-            Platform.runLater(() -> MainController.switchToErrorStatus.accept(ResourceBundleUtil.getStringValue("status_config_error")));
+            App.runLater(() -> MainController.switchToErrorStatus.accept(ResourceBundleUtil.getStringValue("status_config_error")));
         }
         return config;
     }

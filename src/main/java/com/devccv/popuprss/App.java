@@ -9,6 +9,7 @@ import com.devccv.popuprss.status.Status;
 import com.devccv.popuprss.util.ConfigManager;
 import com.devccv.popuprss.util.ResourceBundleUtil;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
@@ -28,19 +29,14 @@ import java.util.concurrent.Executors;
 
 public final class App extends Application {
     public static final Status status = new Github();
+    public static boolean GUI;
     public static final ExecutorService FIXED_THREAD_POOL = Executors.newFixedThreadPool(5);
     public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @Override
     public void start(Stage primaryStage) throws IOException {
         System.setProperty("prism.lcdtext", "false");
-
-        //读取配置文件，设置语言
-        if ("Chinese".equals(ConfigManager.CONFIG.getLanguage())) {
-            Locale.setDefault(Locale.CHINA);
-        } else {
-            Locale.setDefault(Locale.US);
-        }
+        initSetting(true);
 
         FXMLLoader fxmlLoader = new FXMLLoader(ResourcesLoader.loadURL("fxml/main-view.fxml"), ResourceBundleUtil.resource);
         fxmlLoader.setControllerFactory(c -> new MainController(primaryStage));
@@ -56,6 +52,17 @@ public final class App extends Application {
         Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
         primaryStage.setX((screenBounds.getWidth() - primaryStage.getWidth()) / 2);
         primaryStage.setY((screenBounds.getHeight() - primaryStage.getHeight()) / 2);
+    }
+
+    public static void initSetting(boolean gui) {
+        App.GUI = gui;
+
+        //读取配置文件，设置语言
+        if ("Chinese".equals(ConfigManager.CONFIG.getLanguage())) {
+            Locale.setDefault(Locale.CHINA);
+        } else {
+            Locale.setDefault(Locale.US);
+        }
 
         //检查更新
         FIXED_THREAD_POOL.execute(() -> {
@@ -72,5 +79,11 @@ public final class App extends Application {
             } catch (MalformedURLException | URISyntaxException ignored) {
             }
         });
+    }
+
+    public static void runLater(Runnable runnable) {
+        if (App.GUI) {
+            Platform.runLater(runnable);
+        }
     }
 }

@@ -5,8 +5,8 @@ import com.devccv.popuprss.ResourcesLoader;
 import com.devccv.popuprss.thread.FlushLogThread;
 import com.devccv.popuprss.thread.RSSMonitorThread;
 import com.devccv.popuprss.util.ConfigManager;
-import com.devccv.popuprss.util.Encrypt;
 import com.devccv.popuprss.util.ResourceBundleUtil;
+import com.devccv.popuprss.util.Utils;
 import io.github.palexdev.materialfx.controls.MFXRectangleToggleNode;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -17,9 +17,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-import java.net.InetSocketAddress;
 import java.net.Proxy;
-import java.net.URI;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ResourceBundle;
@@ -93,22 +91,25 @@ public final class LogsViewController implements Initializable {
 
     public static void newLog(String log) {
         //可供外部调用的，添加新日志方法
-        if (!log.isBlank()) {
-            String newLog = "\n" + "[" + App.DATE_TIME_FORMATTER.format(LocalDateTime.now()) + "] " + log;
+        if (log.isBlank()) return;
+        String newLog = "\n" + "[" + App.DATE_TIME_FORMATTER.format(LocalDateTime.now()) + "] " + log;
+        if (App.GUI) {
             try {
                 logHolder.put(newLog);
             } catch (InterruptedException ignored) {
                 return;
             }
-        }
-        if (!stopUpdateLogUI.get() && !pauseButtonSelected.get()) {
-            if (flushLogLock.tryLock()) {
-                try {
-                    canFlushCondition.signalAll();
-                } finally {
-                    flushLogLock.unlock();
+            if (!stopUpdateLogUI.get() && !pauseButtonSelected.get()) {
+                if (flushLogLock.tryLock()) {
+                    try {
+                        canFlushCondition.signalAll();
+                    } finally {
+                        flushLogLock.unlock();
+                    }
                 }
             }
+        } else {
+            System.out.print(newLog);
         }
     }
 
@@ -118,17 +119,7 @@ public final class LogsViewController implements Initializable {
         if (startButton.isSelected()) {
             Proxy proxy;
             try {
-                if ("HTTP".equals(ConfigManager.CONFIG.getProxy())) {
-                    String proxyURL = ConfigManager.CONFIG.getProxyURL().split("//")[1];
-                    String[] split = proxyURL.split(":");
-                    proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(split[0], Integer.parseInt(split[1].replace("/", ""))));
-                } else if ("SOCKS".equals(ConfigManager.CONFIG.getProxy())) {
-                    String proxyURL = ConfigManager.CONFIG.getProxyURL().split("//")[1];
-                    String[] split = proxyURL.split(":");
-                    proxy = new Proxy(Proxy.Type.SOCKS, new InetSocketAddress(split[0], Integer.parseInt(split[1].replace("/", ""))));
-                } else {
-                    proxy = Proxy.NO_PROXY;
-                }
+                proxy = Utils.getProxyInstance();
             } catch (Exception e) {
                 Platform.runLater(() -> MainController.switchToErrorStatus.accept(ResourceBundleUtil.getStringValue("status_proxy_error")));
                 startButton.setSelected(false);
@@ -137,7 +128,7 @@ public final class LogsViewController implements Initializable {
 
             URL url;
             try {
-                url = new URI(Encrypt.decryptWithUserName(ConfigManager.CONFIG.getRssLink())).toURL();
+                url = Utils.getURLInstance();
             } catch (Exception e) {
                 Platform.runLater(() -> MainController.switchToErrorStatus.accept(ResourceBundleUtil.getStringValue("status_rss_link_error")));
                 startButton.setSelected(false);
