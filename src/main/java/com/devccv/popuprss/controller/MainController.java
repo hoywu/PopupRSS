@@ -162,7 +162,9 @@ public final class MainController implements Initializable {
         stage.setOnCloseRequest(event -> {
             //关闭线程池，退出
             App.FIXED_THREAD_POOL.shutdownNow();
-            SystemTray.getSystemTray().remove(trayIconObj);
+            if (trayIconObj != null) {
+                SystemTray.getSystemTray().remove(trayIconObj);
+            }
             Platform.exit();
         });
         //托盘图标
@@ -329,7 +331,9 @@ public final class MainController implements Initializable {
         //最小化窗口到托盘图标
         if (event.getButton() == MouseButton.PRIMARY) {
             if (minimizeNotifyFlag) {
-                trayIconObj.displayMessage(ResourceBundleUtil.getStringValue("tray_message_title"), ResourceBundleUtil.getStringValue("tray_message_minimize"), TrayIcon.MessageType.INFO);
+                if (trayIconObj != null) {
+                    trayIconObj.displayMessage(ResourceBundleUtil.getStringValue("tray_message_title"), ResourceBundleUtil.getStringValue("tray_message_minimize"), TrayIcon.MessageType.INFO);
+                }
                 minimizeNotifyFlag = false;
             }
             stage.hide();
@@ -341,7 +345,9 @@ public final class MainController implements Initializable {
         //关闭线程池，退出
         if (event.getButton() == MouseButton.PRIMARY) {
             App.FIXED_THREAD_POOL.shutdownNow();
-            SystemTray.getSystemTray().remove(trayIconObj);
+            if (trayIconObj != null) {
+                SystemTray.getSystemTray().remove(trayIconObj);
+            }
             Platform.exit();
         }
     }
