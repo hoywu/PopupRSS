@@ -46,7 +46,7 @@ public final class FlushLogThread extends Thread {
         while (!LogsViewController.logHolder.isEmpty()) {
             stringBuilder.append(LogsViewController.logHolder.take());
         }
-        if (logsTextArea.getLength() > 1000000) {
+        if (logsTextArea.getLength() > 200000) {
             Platform.runLater(logsTextArea::clear);
             System.gc();
             Platform.runLater(() -> logsTextArea.setText("[" + App.DATE_TIME_FORMATTER.format(LocalDateTime.now()) + "] "
